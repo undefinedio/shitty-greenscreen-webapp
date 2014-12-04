@@ -1,0 +1,12 @@
+{
+  "name": "seriouslyjs",
+  "_cacheHeaders": {
+    "ETag": "\"2fc0553f0ca0a615a50af080a35d641129036ec4\"",
+    "Content-Type": "application/zip",
+    "Content-Disposition": "attachment; filename=Seriously.js-master.zip"
+  },
+  "_release": "e-tag:2fc0553f0",
+  "_source": "https://github.com/brianchirls/Seriously.js/archive/master.zip",
+  "_target": "*",
+  "_originalSource": "https://github.com/brianchirls/Seriously.js/archive/master.zip"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "images-chroma-key",
+  "version": "0.0.0",
+  "authors": [
+    "koray.sels <koray.sels@gmail.com>"
+  ],
+  "description": "chroma key photos with greenscreens",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "seriouslyjs": "https://github.com/brianchirls/Seriously.js/archive/master.zip"
+  }
+}

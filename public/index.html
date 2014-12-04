@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shitty Green screen</title>
+
+    <style type="text/css">
+        img {
+            display: none;
+        }
+
+    </style>
+</head>
+
+<body style="height: 100%;width: 100%;">
+<img src="/randomImage.jpg" id="original_image"/>
+<img src="images/backgrounds/pizza-background.jpg" id="background_image"/>
+<h1>PRESS 'f' for fullscreen</h1>
+
+<canvas id="canvas" width="800" height="800"></canvas>
+
+<div id="controls">
+    <div>
+        <label for="weight">Weight</label>
+        <input type="range" id="weight" min="0" max="5" step="0.01" value="1.32"/>
+    </div>
+    <div>
+        <label for="balance">Balance</label>
+        <input type="range" id="balance" min="0" max="2" step="0.01" value="0.5"/>
+    </div>
+    <div>
+        <label for="clipWhite">clipWhite</label>
+        <input type="range" id="clipWhite" min="0" max="1" step="0.001" value="0.85"/></div>
+    <div>
+        <label for="clipBlack">clipBlack</label>
+        <input type="range" id="clipBlack" min="0" max="1" step="0.0005" value="0.5125"/>
+    </div>
+</div>
+
+<!-- page content goes here -->
+<script src="./lib/seriouslyjs/lib/require.js"></script>
+<script>
+    require.config({
+        baseUrl: 'lib/seriouslyjs/'
+    });
+
+    require([
+        'seriously',
+        'effects/seriously.chroma',
+        'effects/seriously.bleach-bypass',
+        'effects/seriously.blend'
+
+    ], function (Seriously) {
+        //main code goes here
+
+        // declare our variables
+        var seriously = new Seriously(), // the main object that holds the entire composition
+                original_image, // a wrapper object for our source image
+                background_image,
+                chroma = seriously.effect('chroma'),
+                bleach = seriously.effect('bleach-bypass'),
+                blend = seriously.effect('blend'),
+                target; // a wrapper object for our target canvas
+
+
+// Create a source object by passing a CSS query string.
+        original_image = seriously.source('#original_image');
+        background_image = seriously.source('#background_image');
+// now do the same for the target canvas
+        target = seriously.target('#canvas');
+
+
+// Apply all sorts of freakin' awesome effects !!!
+
+        //little bit of bleaching to remove oversaturated reds etc...
+        bleach.source = original_image;
+        bleach.amount = 0.5;
+
+        chroma.weight = '#weight'; //how much of the screen color to remove from semi-transparent
+        chroma.balance = '#balance'; //it's complicated. Play with it.
+        chroma.screen = 'rgb(77, 239, 41)';
+        chroma.clipWhite = '#clipWhite'; //The maximum resulting alpha value of keyed pixels
+        chroma.clipBlack = '#clipBlack';  //The minimum resulting alpha value of keyed pixels
+
+
+        chroma.source = bleach;
+
+
+        blend.mode = 'normal';
+        blend.bottom = background_image;
+        blend.top = chroma;
+
+// connect any node as the source of the target. we only have one.
+        target.source = blend;
+
+        seriously.go();
+
+    });
+
+
+    document.cancelFullScreen = document.webkitExitFullscreen || document.mozCancelFullScreen || document.exitFullscreen;
+
+    var elem = document.querySelector("#canvas");
+
+    document.addEventListener('keydown', function (e) {
+        switch (e.keyCode) {
+            case 13: // ENTER. ESC should also take you out of fullscreen by default.
+                e.preventDefault();
+                document.cancelFullScreen(); // explicitly go out of fs.
+                break;
+            case 70: // f
+                enterFullscreen();
+                break;
+        }
+    }, false);
+
+    function onFullScreenEnter() {
+        console.log("Entered fullscreen!");
+        elem.onwebkitfullscreenchange = onFullScreenExit;
+        elem.onmozfullscreenchange = onFullScreenExit;
+    };
+    // Note: FF nightly needs about:config full-screen-api.enabled set to true.
+    function enterFullscreen() {
+        console.log("enterFullscreen()");
+        elem.onwebkitfullscreenchange = onFullScreenEnter;
+        elem.onmozfullscreenchange = onFullScreenEnter;
+        elem.onfullscreenchange = onFullScreenEnter;
+        if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        } else {
+            if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            } else {
+                elem.requestFullscreen();
+            }
+        }
+        document.getElementById('enter-exit-fs').onclick = exitFullscreen;
+    }
+    function exitFullscreen() {
+        console.log("exitFullscreen()");
+        document.cancelFullScreen();
+        document.getElementById('enter-exit-fs').onclick = enterFullscreen;
+    }
+
+
+</script>
+
+
+</body>
+</html>
