@@ -4,16 +4,31 @@
     <title>Shitty Green screen</title>
 
     <style type="text/css">
-        img {
+        img, video {
             display: none;
         }
 
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 0;
+            /*left: 0;*/
+            right: 0;
+        }
     </style>
 </head>
 
 <body style="height: 100%;width: 100%;">
 <img src="/randomImage.jpg" id="original_image"/>
 <img src="images/backgrounds/pizza-background.jpg" id="background_image"/>
+
 <h1>PRESS 'f' for fullscreen</h1>
 
 <canvas id="canvas" width="800" height="800"></canvas>
@@ -52,6 +67,14 @@
     ], function (Seriously) {
         //main code goes here
 
+        function resize() {
+            var aspect = window.innerWidth / window.innerHeight;
+            target.width = Math.min(960, window.innerWidth);
+            target.height = target.width / aspect;
+            reformatForOutput.width = target.width;
+            reformatForOutput.height = target.height;
+        }
+
         // declare our variables
         var seriously = new Seriously(), // the main object that holds the entire composition
                 original_image, // a wrapper object for our source image
@@ -59,11 +82,30 @@
                 chroma = seriously.effect('chroma'),
                 bleach = seriously.effect('bleach-bypass'),
                 blend = seriously.effect('blend'),
-                target; // a wrapper object for our target canvas
-
+                target,// a wrapper object for our target canvas
+                x = 0,
+                y = 0,
+                vx = 0,
+                vy = 0,
+                lastFrameTime = Date.now();
 
 // Create a source object by passing a CSS query string.
         original_image = seriously.source('#original_image');
+
+        scaleImage = seriously.transform('2d');
+        scaleImage.source = original_image;
+        scaleImage.scale(800 / 800);
+        original_image = scaleImage;
+
+
+        reformat = seriously.transform('reformat');
+        reformatForOutput = seriously.transform('reformat');
+        reformat.width = 1280;
+        reformat.height = 720;
+        reformat.mode = 'none';
+        reformatForOutput.mode = 'cover';
+
+
         background_image = seriously.source('#background_image');
 // now do the same for the target canvas
         target = seriously.target('#canvas');
@@ -72,7 +114,7 @@
 // Apply all sorts of freakin' awesome effects !!!
 
         //little bit of bleaching to remove oversaturated reds etc...
-        bleach.source = original_image;
+        bleach.source = scaleImage;
         bleach.amount = 0.5;
 
         chroma.weight = '#weight'; //how much of the screen color to remove from semi-transparent
@@ -84,15 +126,43 @@
 
         chroma.source = bleach;
 
+        var moveMask = seriously.transform();
+        moveMask.source = chroma;
+        moveMask.translateX = 0;
+        moveMask.scale(0.5);
+
 
         blend.mode = 'normal';
         blend.bottom = background_image;
-        blend.top = chroma;
+        blend.top = moveMask;
 
 // connect any node as the source of the target. we only have one.
-        target.source = blend;
 
-        seriously.go();
+        reformatForOutput.source = blend;
+        target.source = reformatForOutput;
+        resize();
+
+        window.onresize = resize;
+
+        seriously.go(function (now) {
+
+            var diff = (now - lastFrameTime) / 1000;
+
+            vx = Math.min(Math.max(vx + (Math.random() - 0.5) * 100, -200), 200);
+            vy = Math.min(Math.max(vy + (Math.random() - 0.5) * 100, -200), 200);
+            if (x > 435 || x < -435) {
+                vx *= 1;
+            }
+            if (y > 148 || y < -148) {
+                vy *= 1;
+            }
+            x = Math.min(Math.max(x + vx * diff, -250), 250);
+            y = Math.min(Math.max(y + vy * diff, -148), 148);
+            moveMask.translateX = x;
+            moveMask.translateY = y;
+            lastFrameTime = now;
+
+        });
 
     });
 
@@ -117,7 +187,8 @@
         console.log("Entered fullscreen!");
         elem.onwebkitfullscreenchange = onFullScreenExit;
         elem.onmozfullscreenchange = onFullScreenExit;
-    };
+    }
+    ;
     // Note: FF nightly needs about:config full-screen-api.enabled set to true.
     function enterFullscreen() {
         console.log("enterFullscreen()");
