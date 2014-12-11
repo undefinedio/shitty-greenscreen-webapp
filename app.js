@@ -4,6 +4,7 @@ var express = require('express')
 var port = process.env.PORT || 9000; // set our port
 var app = express();
 const GREENSCREEN_DIR = 'public/images/greenscreens/';
+const BACKGROUND_DIR = 'public/images/backgrounds/';
 
 
 var express = require('express');
@@ -17,7 +18,6 @@ function getRandom(min, max) {
 
 app.get('/randomImage.jpg', function (req, res) {
 
-
     fs.readdir(GREENSCREEN_DIR, function (err, files) {
         var randomIndex = getRandom(0, (files.length - 1));
         var randomimage = files[randomIndex];
@@ -28,6 +28,21 @@ app.get('/randomImage.jpg', function (req, res) {
         });
     });
 });
+
+app.get('/randomBackground.jpg', function (req, res) {
+
+    fs.readdir(BACKGROUND_DIR, function (err, files) {
+        var randomIndex = getRandom(0, (files.length - 1));
+        var randomimage = files[randomIndex];
+        console.log('serving ' + BACKGROUND_DIR + randomimage);
+        fs.readFile(BACKGROUND_DIR + randomimage, function (err, data) {
+            res.writeHead(200, {'Content-Type': 'image/jpeg'});
+            res.end(data); // Send the file data to the browser.
+        });
+    });
+});
+
+
 
 app.listen(port);
 console.log('Magic happens on port ' + port);
