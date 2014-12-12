@@ -1,5 +1,6 @@
 var express = require('express')
     , fs = require('fs')
+    , path = require('path')
     , bodyParser = require('body-parser');
 var port = process.env.PORT || 9000; // set our port
 var app = express();
@@ -16,7 +17,7 @@ function getRandom(min, max) {
     return min + Math.floor(Math.random() * (max - min + 1));
 }
 
-app.get('/randomImage.jpg', function (req, res) {
+app.get('/randomImage', function (req, res) {
 
     fs.readdir(GREENSCREEN_DIR, function (err, files) {
         var randomIndex = getRandom(0, (files.length - 1));
@@ -29,19 +30,22 @@ app.get('/randomImage.jpg', function (req, res) {
     });
 });
 
-app.get('/randomBackground.jpg', function (req, res) {
+app.get('/randomBackground', function (req, res) {
 
     fs.readdir(BACKGROUND_DIR, function (err, files) {
         var randomIndex = getRandom(0, (files.length - 1));
         var randomimage = files[randomIndex];
         console.log('serving ' + BACKGROUND_DIR + randomimage);
         fs.readFile(BACKGROUND_DIR + randomimage, function (err, data) {
-            res.writeHead(200, {'Content-Type': 'image/jpeg'});
+            if (path.extname(randomimage) == ".gif") {
+                res.writeHead(200, {'Content-Type': 'image/gif'});
+            } else {
+                res.writeHead(200, {'Content-Type': 'image/jpeg'});
+            }
             res.end(data); // Send the file data to the browser.
         });
     });
 });
-
 
 
 app.listen(port);

@@ -26,8 +26,8 @@
 </head>
 
 <body style="height: 100%;width: 100%;">
-<img src="/randomImage.jpg" id="original_image"/>
-<img src="images/backgrounds/pizza-background.jpg" id="background_image"/>
+<img src="/randomImage" id="original_image"/>
+<img src="/randomBackground" id="background_image"/>
 
 <h1>PRESS 'f' for fullscreen</h1>
 
@@ -73,7 +73,9 @@
         'seriously',
         'effects/seriously.chroma',
         'effects/seriously.bleach-bypass',
-        'effects/seriously.blend'
+        'effects/seriously.blend',
+        'effects/seriously.ripple'
+
 
     ], function (Seriously) {
         //main code goes here
@@ -91,6 +93,7 @@
                 chroma = seriously.effect('chroma'),
                 bleach = seriously.effect('bleach-bypass'),
                 blend = seriously.effect('blend'),
+                ripple = seriously.effect('ripple'),
                 target,// a wrapper object for our target canvas
                 x = 0,
                 y = 0,
@@ -151,11 +154,13 @@
             var moveMask = seriously.transform();
             moveMask.source = chroma;
             moveMask.translateX = 0;
-            moveMask.scale(0.5);
+            moveMask.scale(0.3);
 
+
+            ripple.source = background_image;
 
             blend.mode = 'normal';
-            blend.bottom = background_image;
+            blend.bottom = ripple;
             blend.top = moveMask;
 
 // connect any node as the source of the target. we only have one.
@@ -170,6 +175,8 @@
                 updown = (Math.sin((diff))) * 100;
                 moveMask.translateX = updown;
 
+                ripple.wave = Math.abs(Math.sin(now/2000 / 4));
+                ripple.distortion = Math.abs(Math.sin(now/1000 / 4.5)) * 2;
 
             });
         }
@@ -186,12 +193,12 @@
 
 
         function changeForeground() {
-            $('#original_image').attr('src', '/randomImage.jpg?' + foregroundImage);
+            $('#original_image').attr('src', '/randomImage?' + foregroundImage);
             foregroundImage++;
         }
 
         function changeBackground() {
-            $('#background_image').attr('src', '/randomBackground.jpg?' + backgroundImage);
+            $('#background_image').attr('src', '/randomBackground?' + backgroundImage);
             backgroundImage++;
         }
 
@@ -225,12 +232,15 @@
         }
     }, false);
 
+    // Called whenever the browser exits fullscreen.
+    function onFullScreenExit() {
+        console.log("Exited fullscreen");
+    };
     function onFullScreenEnter() {
         console.log("Entered fullscreen!");
         elem.onwebkitfullscreenchange = onFullScreenExit;
         elem.onmozfullscreenchange = onFullScreenExit;
-    }
-    ;
+    };
     // Note: FF nightly needs about:config full-screen-api.enabled set to true.
     function enterFullscreen() {
         console.log("enterFullscreen()");
