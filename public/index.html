@@ -193,12 +193,12 @@
 
 
         function changeForeground() {
-            $('#original_image').attr('src', '/randomImage?' + foregroundImage);
+            $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
             foregroundImage++;
         }
 
         function changeBackground() {
-            $('#background_image').attr('src', '/randomBackground?' + backgroundImage);
+            $('#background_image').attr('src', '/randomBackground?count=' + backgroundImage);
             backgroundImage++;
         }
 
