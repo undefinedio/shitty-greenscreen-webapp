@@ -13,6 +13,7 @@ var express = require('express');
 var app = express();
 
 app.use(express.static(__dirname + '/public'));
+app.use("/public", express.static(path.join(__dirname, 'public')));
 
 function getRandom(min, max) {
     return min + Math.floor(Math.random() * (max - min + 1));
@@ -25,12 +26,6 @@ app.get('/randomImage', function (req, res) {
     var count = req.query.count;
 
     fs.readdir(GREENSCREEN_DIR, function (err, files) {
-//        if (count > files.length - 1 ) {
-//            count = 0;
-//        } else {
-//            count++;
-//        }
-
         var randomIndex = count;
         var randomimage = files[randomIndex];
         console.log('serving ' + GREENSCREEN_DIR + randomimage);
