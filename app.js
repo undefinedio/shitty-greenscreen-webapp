@@ -13,7 +13,6 @@ var express = require('express');
 var app = express();
 
 app.use(express.static(__dirname + '/public'));
-app.use("/public", express.static(path.join(__dirname, 'public')));
 
 function getRandom(min, max) {
     return min + Math.floor(Math.random() * (max - min + 1));
