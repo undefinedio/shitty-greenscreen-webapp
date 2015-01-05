@@ -18,10 +18,20 @@ function getRandom(min, max) {
     return min + Math.floor(Math.random() * (max - min + 1));
 }
 
+var count = 0;
+
 app.get('/randomImage', function (req, res) {
 
+    var count = req.query.count;
+
     fs.readdir(GREENSCREEN_DIR, function (err, files) {
-        var randomIndex = getRandom(0, (files.length - 1));
+//        if (count > files.length - 1 ) {
+//            count = 0;
+//        } else {
+//            count++;
+//        }
+
+        var randomIndex = count;
         var randomimage = files[randomIndex];
         console.log('serving ' + GREENSCREEN_DIR + randomimage);
         fs.readFile(GREENSCREEN_DIR + randomimage, function (err, data) {

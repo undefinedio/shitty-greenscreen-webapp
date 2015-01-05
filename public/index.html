@@ -22,21 +22,48 @@
             /*left: 0;*/
             right: 0;
         }
+
+        #back, #next {
+            color: white;
+            font-size: 72px;
+            position: absolute;
+            top: 50%;
+            z-index: 100;
+            -webkit-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            -o-transform: translateY(-50%);
+            transform: translateY(-50%);
+            text-decoration: none;
+        }
+
+        #next {
+            right: 0;
+        }
+
+        .muile {
+            display: block;
+            z-index: 100;
+            position: absolute;
+        }
     </style>
 </head>
 
 <body style="height: 100%;width: 100%;">
+<img src="images/muile.png" class='muile' alt=""/>
 <img src="/randomImage" id="original_image"/>
 <img src="/randomBackground" id="background_image"/>
 
-<h1>PRESS 'f' for fullscreen</h1>
+<!--<h1>PRESS 'f' for fullscreen</h1>-->
 
+<a href="#" id="next">&#9758;</a>
+<a href="#" id="back">&#9756;</a>
 <canvas id="canvas" width="800" height="800"></canvas>
 
 <div id="controls">
     <div>
         <label for="weight">Weight</label>
-        <input type="range" id="weight" min="0" max="20" step="0.01" value="4.3"/>
+        <input type="range" id="weight" min="0" max="20" step="0.01" value="4"/>
     </div>
     <div>
         <label for="balance">Balance</label>
@@ -47,7 +74,7 @@
         <input type="range" id="clipWhite" min="0" max="1" step="0.001" value="0"/></div>
     <div>
         <label for="clipBlack">clipBlack</label>
-        <input type="range" id="clipBlack" min="0" max="1" step="0.001" value="0.95"/>
+        <input type="range" id="clipBlack" min="0" max="1" step="0.001" value="0.918"/>
     </div>
 
 </div>
@@ -56,213 +83,266 @@
 <script src="./lib/seriouslyjs/lib/require.js"></script>
 <script>
 
-    $(function ($) {
-        $('input').on('change', function () {
-            print.call($(this));
-        });
-        function print() {
-            console.log(this.attr('id') + ' -> '  + this.val());
-        }
+$(function ($) {
+    $('input').on('change', function () {
+        print.call($(this));
     });
+    function print() {
+        console.log(this.attr('id') + ' -> ' + this.val());
+    }
+});
 
-    require.config({
-        baseUrl: 'lib/seriouslyjs/'
-    });
+require.config({
+    baseUrl: 'lib/seriouslyjs/'
+});
 
-    require([
-        'seriously',
-        'effects/seriously.chroma',
-        'effects/seriously.bleach-bypass',
-        'effects/seriously.blend',
-        'effects/seriously.ripple'
-
-
-    ], function (Seriously) {
-        //main code goes here
-
-        var foregroundImage = 1;
-        var backgroundImage = 1;
-
-        var foregroundTimer = 2000;
-        var backgroundTimerMultiplier = 3;
-        var updown, diff;
-
-        var seriously = new Seriously(), // the main object that holds the entire composition
-                original_image, // a wrapper object for our source image
-                background_image,
-                chroma = seriously.effect('chroma'),
-                bleach = seriously.effect('bleach-bypass'),
-                blend = seriously.effect('blend'),
-                ripple = seriously.effect('ripple'),
-                target,// a wrapper object for our target canvas
-                x = 0,
-                y = 0,
-                vx = 0,
-                vy = 0,
-                lastFrameTime = Date.now();
+require([
+    'seriously',
+    'effects/seriously.chroma',
+    'effects/seriously.bleach-bypass',
+    'effects/seriously.blend',
+    'effects/seriously.ripple'
 
 
-        function resize() {
-            var aspect = window.innerWidth / window.innerHeight;
-            target.width = Math.min(960, window.innerWidth);
-            target.height = target.width / aspect;
-            reformatForOutput.width = target.width;
-            reformatForOutput.height = target.height;
-        }
+], function (Seriously) {
 
-        function chromaMagic() {
-            // declare our variables
+    var foregroundImage = 1;
+    var backgroundImage = 1;
+
+    var foregroundTimer = 5000;
+    var backgroundTimerMultiplier = 3;
+    var updown, diff;
+
+    var seriously = new Seriously(), // the main object that holds the entire composition
+            original_image, // a wrapper object for our source image
+            background_image,
+            chroma = seriously.effect('chroma'),
+            bleach = seriously.effect('bleach-bypass'),
+            blend = seriously.effect('blend'),
+            ripple = seriously.effect('ripple'),
+            target,// a wrapper object for our target canvas
+            x = 0,
+            y = 0,
+            vx = 0,
+            vy = 0,
+            lastFrameTime = Date.now();
+
+
+    function resize() {
+        var aspect = window.innerWidth / window.innerHeight;
+        target.width = Math.min(960, window.innerWidth);
+        target.height = target.width / aspect;
+        reformatForOutput.width = target.width;
+        reformatForOutput.height = target.height;
+    }
+
+    function chromaMagic() {
 
 
 // Create a source object by passing a CSS query string.
-            original_image = seriously.source('#original_image');
+        original_image = seriously.source('#original_image');
 
-            scaleImage = seriously.transform('2d');
-            scaleImage.source = original_image;
-            scaleImage.scale(800 / 800);
-            original_image = scaleImage;
-
-
-            reformat = seriously.transform('reformat');
-            reformatForOutput = seriously.transform('reformat');
-            reformat.width = 1280;
-            reformat.height = 720;
-            reformat.mode = 'none';
-            reformatForOutput.mode = 'cover';
+        scaleImage = seriously.transform('2d');
+        scaleImage.source = original_image;
+        scaleImage.scale(1000 / 1000);
+        original_image = scaleImage;
 
 
-            background_image = seriously.source('#background_image');
+        reformat = seriously.transform('reformat');
+        reformatForOutput = seriously.transform('reformat');
+        reformat.width = 1280;
+        reformat.height = 720;
+        reformat.mode = 'none';
+        reformatForOutput.mode = 'cover';
+
+
+        background_image = seriously.source('#background_image');
 // now do the same for the target canvas
-            target = seriously.target('#canvas');
+        target = seriously.target('#canvas');
 
 
 // Apply all sorts of freakin' awesome effects !!!
 
-            //little bit of bleaching to remove oversaturated reds etc...
-            bleach.source = scaleImage;
-            bleach.amount = 0.5;
+        //little bit of bleaching to remove oversaturated reds etc...
+        bleach.source = scaleImage;
+        bleach.amount = 0.5;
 
-            chroma.weight = '#weight'; //how much of the screen color to remove from semi-transparent
-            chroma.balance = '#balance'; //it's complicated. Play with it.
-            chroma.screen = 'rgb(77, 239, 41)';
-            chroma.clipWhite = '#clipWhite'; //The maximum resulting alpha value of keyed pixels
-            chroma.clipBlack = '#clipBlack';  //The minimum resulting alpha value of keyed pixels
-
-
-            chroma.source = bleach;
-
-            var moveMask = seriously.transform();
-            moveMask.source = chroma;
-            moveMask.translateX = 0;
-            moveMask.scale(0.3);
+        chroma.weight = '#weight'; //how much of the screen color to remove from semi-transparent
+        chroma.balance = '#balance'; //it's complicated. Play with it.
+        chroma.screen = 'rgb(77, 239, 41)';
+        chroma.clipWhite = '#clipWhite'; //The maximum resulting alpha value of keyed pixels
+        chroma.clipBlack = '#clipBlack';  //The minimum resulting alpha value of keyed pixels
 
 
-            ripple.source = background_image;
+        chroma.source = bleach;
 
-            blend.mode = 'normal';
-            blend.bottom = ripple;
-            blend.top = moveMask;
+        var moveMask = seriously.transform();
+        moveMask.source = chroma;
+        moveMask.translateX = 0;
+        moveMask.translateY = -100;
+        moveMask.scale(1);
+
+        ripple.source = background_image;
+
+        blend.mode = 'normal';
+        blend.bottom = ripple;
+        blend.top = moveMask;
 
 // connect any node as the source of the target. we only have one.
 
-            reformatForOutput.source = blend;
-            target.source = reformatForOutput;
+        reformatForOutput.source = blend;
+        target.source = reformatForOutput;
 
-            seriously.go(function (now) {
+        seriously.go(function (now) {
 
-                diff = ((now - lastFrameTime) / 1000);
+            diff = ((now - lastFrameTime) / 1000);
 
-                updown = (Math.sin((diff))) * 100;
-                moveMask.translateX = updown;
+            updown = (Math.sin((diff))) * 50;
+            moveMask.translateX = updown;
 
-                ripple.wave = Math.abs(Math.sin(now/2000 / 4));
-                ripple.distortion = Math.abs(Math.sin(now/1000 / 4.5)) * 2;
+            ripple.wave = Math.abs(Math.sin(now / 2000 / 4));
+            ripple.distortion = Math.abs(Math.sin(now / 1000 / 4.5)) * 2;
 
-            });
-        }
-
-
-        function init() {
-            chromaMagic();
-            resize();
-            window.onresize = resize;
-            // Start looping
-            StartForegroundLoop();
-            StartBackgroundLoop();
-        }
+        });
+    }
 
 
-        function changeForeground() {
-            $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
+    function init() {
+        chromaMagic();
+        resize();
+        window.onresize = resize;
+        StartForegroundLoop();
+        StartBackgroundLoop();
+    }
+
+    var foregroundImage = 1,
+            maxforegroundImages = 127;
+
+    function getRandom(min, max) {
+        return min + Math.floor(Math.random() * (max - min + 1));
+    }
+
+    function nextPic() {
+        if (foregroundImage < maxforegroundImages) {
             foregroundImage++;
-        }
-
-        function changeBackground() {
-            $('#background_image').attr('src', '/randomBackground?count=' + backgroundImage);
-            backgroundImage++;
-        }
-
-        function StartForegroundLoop() {
-            setInterval(changeForeground, foregroundTimer); // repeat myself
-        }
-
-        function StartBackgroundLoop() {
-            setInterval(changeBackground, foregroundTimer * backgroundTimerMultiplier); // repeat myself
-        }
-
-
-        init();
-
-    });
-
-
-    document.cancelFullScreen = document.webkitExitFullscreen || document.mozCancelFullScreen || document.exitFullscreen;
-
-    var elem = document.querySelector("#canvas");
-
-    document.addEventListener('keydown', function (e) {
-        switch (e.keyCode) {
-            case 13: // ENTER. ESC should also take you out of fullscreen by default.
-                e.preventDefault();
-                document.cancelFullScreen(); // explicitly go out of fs.
-                break;
-            case 70: // f
-                enterFullscreen();
-                break;
-        }
-    }, false);
-
-    // Called whenever the browser exits fullscreen.
-    function onFullScreenExit() {
-        console.log("Exited fullscreen");
-    };
-    function onFullScreenEnter() {
-        console.log("Entered fullscreen!");
-        elem.onwebkitfullscreenchange = onFullScreenExit;
-        elem.onmozfullscreenchange = onFullScreenExit;
-    };
-    // Note: FF nightly needs about:config full-screen-api.enabled set to true.
-    function enterFullscreen() {
-        console.log("enterFullscreen()");
-        elem.onwebkitfullscreenchange = onFullScreenEnter;
-        elem.onmozfullscreenchange = onFullScreenEnter;
-        elem.onfullscreenchange = onFullScreenEnter;
-        if (elem.webkitRequestFullscreen) {
-            elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
         } else {
-            if (elem.mozRequestFullScreen) {
-                elem.mozRequestFullScreen();
-            } else {
-                elem.requestFullscreen();
-            }
+            foregroundImage = 1;
         }
-        document.getElementById('enter-exit-fs').onclick = exitFullscreen;
+
+        window.history.pushState(null, null, '#' + foregroundImage);
+        $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
     }
-    function exitFullscreen() {
-        console.log("exitFullscreen()");
-        document.cancelFullScreen();
-        document.getElementById('enter-exit-fs').onclick = enterFullscreen;
+
+    function prevPic() {
+        if (foregroundImage > 1) {
+            foregroundImage--;
+        } else {
+            foregroundImage = maxforegroundImages;
+        }
+
+        $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
+        window.history.pushState(null, null, '#' + foregroundImage);
     }
+
+
+    function StartForegroundLoop() {
+        var type = window.location.hash.substr(1);
+
+        if (type === '') {
+            foregroundImage = getRandom(foregroundImage, maxforegroundImages);
+        } else {
+            foregroundImage = type;
+        }
+
+        $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
+
+        $('#next').on('click', function (e) {
+            e.preventDefault();
+            nextPic();
+        });
+
+
+        $('#back').on('click', function (e) {
+            e.preventDefault();
+            prevPic();
+        });
+
+        $(window).keydown(function (e) {
+            if (e.keyCode === 39) {
+                nextPic();
+            }
+
+            if (e.keyCode === 37) {
+                prevPic();
+            }
+        });
+    }
+
+    function changeBackground() {
+        $('#background_image').attr('src', '/randomBackground?count=' + backgroundImage);
+        backgroundImage++;
+    }
+
+    function StartBackgroundLoop() {
+        setInterval(changeBackground, foregroundTimer * backgroundTimerMultiplier); // repeat myself
+    }
+
+    init();
+
+});
+
+
+document.cancelFullScreen = document.webkitExitFullscreen || document.mozCancelFullScreen || document.exitFullscreen;
+
+var elem = document.querySelector("#canvas");
+
+document.addEventListener('keydown', function (e) {
+    switch (e.keyCode) {
+        case 13: // ENTER. ESC should also take you out of fullscreen by default.
+            e.preventDefault();
+            document.cancelFullScreen(); // explicitly go out of fs.
+            break;
+        case 70: // f
+            enterFullscreen();
+            break;
+    }
+}, false);
+
+// Called whenever the browser exits fullscreen.
+function onFullScreenExit() {
+    console.log("Exited fullscreen");
+}
+;
+
+function onFullScreenEnter() {
+    console.log("Entered fullscreen!");
+    elem.onwebkitfullscreenchange = onFullScreenExit;
+    elem.onmozfullscreenchange = onFullScreenExit;
+}
+;
+// Note: FF nightly needs about:config full-screen-api.enabled set to true.
+function enterFullscreen() {
+    console.log("enterFullscreen()");
+    elem.onwebkitfullscreenchange = onFullScreenEnter;
+    elem.onmozfullscreenchange = onFullScreenEnter;
+    elem.onfullscreenchange = onFullScreenEnter;
+    if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+    } else {
+        if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        } else {
+            elem.requestFullscreen();
+        }
+    }
+    document.getElementById('enter-exit-fs').onclick = exitFullscreen;
+}
+
+function exitFullscreen() {
+    console.log("exitFullscreen()");
+    document.cancelFullScreen();
+    document.getElementById('enter-exit-fs').onclick = enterFullscreen;
+}
 
 
 </script>
