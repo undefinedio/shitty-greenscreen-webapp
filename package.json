@@ -1,9 +1,13 @@
 {
   "name": "images-chroma-key",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "app.js",
+  "engines": {
+    "node": "0.10.x"
+  },
   "scripts": {
+    "start" : "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -11,5 +15,6 @@
   "dependencies": {
     "body-parser": "^1.10.0",
     "express": "^3.18.4"
-  }
+  },
+  "postinstall": "bower install"
 }
