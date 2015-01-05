@@ -283,6 +283,7 @@ require([
             foregroundImage = type;
         }
 
+        window.history.pushState(null, null, '#' + foregroundImage);
         $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
         updateFB(foregroundImage);
 
