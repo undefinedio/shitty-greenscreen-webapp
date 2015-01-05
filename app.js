@@ -24,13 +24,6 @@ app.get('/randomImage', function (req, res) {
 
     var count = req.query.count;
 
-    app.use(OG([
-        {
-            image: "https://shitty-partypics.herokuapp.com/randomImage?count=" + count,
-            url: 'https://shitty-partypics.herokuapp.com/#' + count
-        }
-    ]));
-
     fs.readdir(GREENSCREEN_DIR, function (err, files) {
         var randomIndex = count;
         var randomimage = files[randomIndex];
