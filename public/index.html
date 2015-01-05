@@ -6,6 +6,7 @@
     <meta property="og:image" content="https://shitty-partypics.herokuapp.com/images/share.jpg"/>
     <meta property="og:site_name" content="Shitty Party Gallery"/>
     <meta property="og:description" content="Grootste muilfestijn from Antwerpen in the Muiltatuli."/>
+
     <style type="text/css">
         img, video {
             display: none;
@@ -264,7 +265,7 @@ require([
         }
 
         $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
-        $('meta[name=og\\:image]').attr('content', '/randomImage?count=' + foregroundImage);
+        $('meta[name=og\\:image]').attr('content', 'https://shitty-partypics.herokuapp.com//randomImage?count=' + foregroundImage);
 
         $('#next').on('click', function (e) {
             e.preventDefault();
