@@ -32,7 +32,7 @@ app.get('/randomImage', function (req, res) {
             res.writeHead(200, {'Content-Type': 'image/jpeg'});
             res.end(data); // Send the file data to the browser.
             app.use(OG([{
-                image: data,
+                image: "https://shitty-partypics.herokuapp.com/randomImage?count=" + count,
                 url : 'https://shitty-partypics.herokuapp.com/#' + count
             }]));
         });
