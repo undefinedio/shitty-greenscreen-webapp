@@ -7,7 +7,7 @@ var port = process.env.PORT || 9000; // set our port
 var app = express();
 const GREENSCREEN_DIR = 'public/images/greenscreens/';
 const BACKGROUND_DIR = 'public/images/backgrounds/';
-
+var OG = require('express-metatag')('og')
 
 var express = require('express');
 var app = express();
@@ -31,6 +31,10 @@ app.get('/randomImage', function (req, res) {
         fs.readFile(GREENSCREEN_DIR + randomimage, function (err, data) {
             res.writeHead(200, {'Content-Type': 'image/jpeg'});
             res.end(data); // Send the file data to the browser.
+            app.use(OG([{
+                image: data,
+                url : 'https://shitty-partypics.herokuapp.com/#' + count
+            }]));
         });
     });
 });
