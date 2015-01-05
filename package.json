@@ -1,20 +1,19 @@
 {
-  "name": "images-chroma-key",
+  "name": "shitty-partypics",
   "version": "0.0.1",
-  "description": "",
   "main": "app.js",
   "engines": {
     "node": "0.10.x"
   },
   "scripts": {
-    "start" : "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "bower install"
   },
-  "author": "",
+  "author": "unde.fined",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.10.0",
     "express": "^3.18.4"
-  },
-  "postinstall": "bower install"
+  }
 }
