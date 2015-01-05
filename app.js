@@ -24,6 +24,13 @@ app.get('/randomImage', function (req, res) {
 
     var count = req.query.count;
 
+    app.use(OG([
+        {
+            image: "https://shitty-partypics.herokuapp.com/randomImage?count=" + count,
+            url: 'https://shitty-partypics.herokuapp.com/#' + count
+        }
+    ]));
+
     fs.readdir(GREENSCREEN_DIR, function (err, files) {
         var randomIndex = count;
         var randomimage = files[randomIndex];
@@ -31,11 +38,9 @@ app.get('/randomImage', function (req, res) {
         fs.readFile(GREENSCREEN_DIR + randomimage, function (err, data) {
             res.writeHead(200, {'Content-Type': 'image/jpeg'});
             res.end(data); // Send the file data to the browser.
-            app.use(OG([{
-                image: "https://shitty-partypics.herokuapp.com/randomImage?count=" + count,
-                url : 'https://shitty-partypics.herokuapp.com/#' + count
-            }]));
         });
+
+
     });
 });
 

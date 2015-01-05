@@ -3,7 +3,7 @@
 <head>
     <title>Shitty Green screen</title>
     <meta property="og:title" content="Shitty Party Gallery"/>
-    <meta property="og:image" content="https://shitty-partypics.herokuapp.com/images/share.jpg"/>
+    <!--<meta property="og:image" content="https://shitty-partypics.herokuapp.com/images/share.jpg"/>-->
     <meta property="og:site_name" content="Shitty Party Gallery"/>
     <meta property="og:description" content="Grootste muilfestijn from Antwerpen in the Muiltatuli."/>
 
@@ -51,10 +51,25 @@
             z-index: 100;
             position: absolute;
         }
+
+        .fb-like {
+            z-index: 100;
+            position: absolute !important;
+            bottom: 20px;
+            left: 20px;
+        }
     </style>
 </head>
 
 <body style="height: 100%;width: 100%;">
+<div id="fb-root"></div><script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {return;}
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=YOUR-APP-ID";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
 <img src="images/muile.png" class='muile' alt=""/>
 <img src="/randomImage" id="original_image"/>
 <img src="/randomBackground" id="background_image"/>
@@ -63,7 +78,7 @@
 
 <a href="#" id="next">&#9758;</a>
 <a href="#" id="back">&#9756;</a>
-<canvas id="canvas" width="800" height="800"></canvas>
+<div class="fb-like" data-href="https://shitty-partypics.herokuapp.com/" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div><canvas id="canvas" width="800" height="800"></canvas>
 
 <!--<iframe width="420" height="315"-->
 <!--src="http://www.youtube.com/embed/XGSy3_Czz8k?autoplay=1&autohide=0">-->
@@ -240,6 +255,8 @@ require([
 
         window.history.pushState(null, null, '#' + foregroundImage);
         $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
+        $('.fb-like').attr('data-href', 'https://shitty-partypics.herokuapp.com//randomImage?count=' + foregroundImage);
+
     }
 
     function prevPic() {
@@ -249,8 +266,9 @@ require([
             foregroundImage = maxforegroundImages;
         }
 
-        $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
         window.history.pushState(null, null, '#' + foregroundImage);
+        $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
+        $('.fb-like').attr('data-href', 'https://shitty-partypics.herokuapp.com//randomImage?count=' + foregroundImage);
     }
 
 
@@ -264,6 +282,7 @@ require([
         }
 
         $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
+        $('.fb-like').attr('data-href', 'https://shitty-partypics.herokuapp.com//randomImage?count=' + foregroundImage);
 
         $('#next').on('click', function (e) {
             e.preventDefault();
