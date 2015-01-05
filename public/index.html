@@ -3,7 +3,7 @@
 <head>
     <title>Shitty Green screen</title>
     <meta property="og:title" content="Shitty Party Gallery"/>
-    <meta property="og:image" content="https://shitty-partypics.herokuapp.com/images/greenscreens/IMG_3382.JPG"/>
+    <meta property="og:image" content="https://shitty-partypics.herokuapp.com/images/greenscreens/"/>
     <meta property="og:site_name" content="Shitty Party Gallery"/>
     <meta property="og:description" content="Grootste muilfestijn from Antwerpen in the Muiltatuli."/>
 
@@ -222,7 +222,7 @@ require([
         window.onresize = resize;
         StartForegroundLoop();
         StartBackgroundLoop();
-        startMusic();
+       // startMusic();
     }
 
     var foregroundImage = 0,
@@ -265,6 +265,7 @@ require([
         }
 
         $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
+        $('meta[name=og\\:image]').attr('content', '/randomImage?count=' + foregroundImage);
 
         $('#next').on('click', function (e) {
             e.preventDefault();
