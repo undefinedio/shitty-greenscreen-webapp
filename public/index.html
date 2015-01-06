@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Shitty Green screen</title>
+    <title>Shitty Party Gallery</title>
     <meta property="og:title" content="Shitty Party Gallery"/>
     <meta property="og:image" content="https://shitty-partypics.herokuapp.com/images/share.jpg"/>
     <meta property="og:site_name" content="Shitty Party Gallery"/>
-    <meta property="og:description" content="Grootste muilfestijn from Antwerpen in the Muiltatuli."/>
+    <meta property="og:description"
+          content="This was the shitty party. The biggest muilfestijn from Antwerpen and surrounding parking. A big up to the Muiltatuli and the lovely crowd. See you next time!"/>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
     <style type="text/css">
         img, video {
@@ -52,7 +54,7 @@
             position: absolute;
         }
 
-        .fb-like {
+        #fblikebutton {
             z-index: 100;
             position: absolute !important;
             bottom: 20px;
@@ -63,9 +65,26 @@
             display: block;
             z-index: 100;
             position: absolute;
-            bottom: 70px;
+            bottom: 100px;
             width: 99px;
             left: 30px;
+        }
+
+        .btn-share {
+            z-index: 100;
+            position: relative;
+            color: white;
+            font-size: 30px;
+            display: inline-block;
+            margin-right: 5px;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        .fb-like {
+            clear: both;
+            display: block !important;
+            top: 12px;
         }
     </style>
 </head>
@@ -103,7 +122,15 @@
 <a href="#" id="next">&#9758;</a>
 <a href="#" id="back">&#9756;</a>
 
-<div id="fblikebutton"></div>
+<div id="fblikebutton">
+    <a class="btn-share" data-share="facebook">
+        <i class="fa fa-facebook-square"></i>
+    </a>
+    <a class="btn-share" data-share="twitter">
+        <i class="fa fa-twitter-square"></i>
+    </a>
+    <div class="fb-like" data-href="https://shitty-partypics.herokuapp.com/" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
+</div>
 
 <canvas id="canvas" width="800" height="800"></canvas>
 
@@ -155,7 +182,7 @@ require([
     var foregroundImage = 1;
     var backgroundImage = 1;
 
-    var foregroundTimer = 1000;
+    var foregroundTimer = 2000;
     var backgroundTimerMultiplier = 3;
     var updown, diff;
 
@@ -252,6 +279,8 @@ require([
         });
     }
 
+    var foregroundImage = 1,
+            maxforegroundImages = 127;
 
     function init() {
         chromaMagic();
@@ -260,10 +289,34 @@ require([
         StartForegroundLoop();
         StartBackgroundLoop();
         startMusic();
+        sharePic();
     }
 
-    var foregroundImage = 1,
-            maxforegroundImages = 127;
+    function sharePic() {
+
+        $('.btn-share').on('click', function () {
+            var social = $(this).data("share");
+            var winWidth = 370;
+            var winHeight = 320;
+            var winTop = (screen.height / 2) - (winHeight / 2);
+            var winLeft = (screen.width / 2) - (winWidth / 2);
+
+            title = encodeURIComponent("Shitty Party Gallery");
+            descr = encodeURIComponent("This was the shitty party. The biggest muilfestijn from Antwerpen and surrounding parking. A big up to the Muiltatuli and the lovely crowd. See you next time!");
+            url = encodeURIComponent('https://shitty-partypics.herokuapp.com/#'+foregroundImage);
+            image = encodeURIComponent('https://shitty-partypics.herokuapp.com/images/share.jpg');
+
+            switch (social) {
+                case 'facebook':
+                    window.open('http://www.facebook.com/sharer.php?s=100&p[title]=' + title + '&p[summary]=' + descr + '&p[url]=' + url + '&p[images][0]=' + image, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=' + winWidth + ',height=' + winHeight);
+                    break;
+                case 'twitter':
+                    window.open('http://www.twitter.com/share?text=' + descr + ' #shittyguide #antwerpen', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=' + winWidth + ',height=' + winHeight);
+                    break;
+            }
+        });
+
+    }
 
     function getRandom(min, max) {
         return min + Math.floor(Math.random() * (max - min + 1));
@@ -278,7 +331,6 @@ require([
 
         window.history.pushState(null, null, '#' + foregroundImage);
         $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
-        updateFB(foregroundImage);
     }
 
     function prevPic() {
@@ -290,7 +342,6 @@ require([
 
         window.history.pushState(null, null, '#' + foregroundImage);
         $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
-        updateFB(foregroundImage);
     }
 
 
@@ -305,7 +356,6 @@ require([
 
         window.history.pushState(null, null, '#' + foregroundImage);
         $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
-        updateFB(foregroundImage);
 
         $('#next').on('click', function (e) {
             e.preventDefault();
@@ -330,12 +380,6 @@ require([
 
     }
 
-    function updateFB(foregroundImage) {
-        var fblikebutton_markup = '<div class="fb-like" data-href="https://shitty-partypics.herokuapp.com/#' + foregroundImage + '" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>';
-        $('#fblikebutton').html(fblikebutton_markup);
-        FB.XFBML.parse($('#fblikebutton')[0]);
-    }
-
     function changeBackground() {
         $('#background_image').attr('src', '/randomBackground?count=' + backgroundImage);
         backgroundImage++;
@@ -347,10 +391,14 @@ require([
 
     function startMusic() {
         var music = [
-                    'VGWlOSMmq5o', // darude
+                    'VGWlOSMmq5o', // dettweiler
                     'w15oWDh02K4', // gigi
-                    'EaBvyI8PLV0', // miley
                     'ZnBeTPpr98g', // push
+                    'pTtcMP87qz8', // 8 bit
+                    'GM5Kw6LVYlk', // nwagezani
+                    'g7uHLJOsU_4', // atakak
+                    'YK3ZP6frAMc', // popcorn
+                    'pgRUHIeaKOk', // omar
                 ],
                 randMusic = music[getRandom(0, music.length - 1)];
 
@@ -418,7 +466,6 @@ function exitFullscreen() {
 
 
 </script>
-
 
 </body>
 </html>
