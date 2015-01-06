@@ -28,7 +28,7 @@
             /*left: 0;*/
             right: 0;
             color: white;
-            opacity: 0;
+            /*opacity: 0;*/
         }
 
         #back, #next {
@@ -160,18 +160,18 @@
 <div id="controls">
     <div>
         <label for="weight">Weight</label>
-        <input type="range" id="weight" min="0" max="20" step="0.01" value="4"/>
+        <input type="range" id="weight" min="0" max="20" step="0.01" value="13.25"/>
     </div>
     <div>
         <label for="balance">Balance</label>
-        <input type="range" id="balance" min="0" max="1" step="0.001" value="1"/>
+        <input type="range" id="balance" min="0" max="1" step="0.001" value="0"/>
     </div>
     <div>
         <label for="clipWhite">clipWhite</label>
-        <input type="range" id="clipWhite" min="0" max="1" step="0.001" value="0"/></div>
+        <input type="range" id="clipWhite" min="0" max="1" step="0.001" value="0.048"/></div>
     <div>
         <label for="clipBlack">clipBlack</label>
-        <input type="range" id="clipBlack" min="0" max="1" step="0.001" value="0.918"/>
+        <input type="range" id="clipBlack" min="0" max="1" step="0.001" value="1"/>
     </div>
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -260,14 +260,13 @@ require([
 
         //little bit of bleaching to remove oversaturated reds etc...
         bleach.source = scaleImage;
-        bleach.amount = 0.5;
+        bleach.amount = 0.2;
 
-        chroma.weight = '#weight'; //how much of the screen color to remove from semi-transparent
-        chroma.balance = '#balance'; //it's complicated. Play with it.
-        chroma.screen = 'rgb(77, 239, 41)';
-        chroma.clipWhite = '#clipWhite'; //The maximum resulting alpha value of keyed pixels
-        chroma.clipBlack = '#clipBlack';  //The minimum resulting alpha value of keyed pixels
-
+        chroma.weight = 11.32; //how much of the screen color to remove from semi-transparent
+        chroma.balance =  0.58; //it's complicated. Play with it.
+        chroma.screen = 'rgb(30, 222, 32)';
+        chroma.clipWhite = 0; //The maximum resulting alpha value of keyed pixels
+        chroma.clipBlack = 1;  //The minimum resulting alpha value of keyed pixels
 
         chroma.source = bleach;
 
