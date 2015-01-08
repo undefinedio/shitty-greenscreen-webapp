@@ -19,8 +19,10 @@ require([
     var updown, diff;
 
     var seriously = new Seriously(), // the main object that holds the entire composition
+        logo_image,      // a wrapper object for our logo image
         original_image, // a wrapper object for our source image
         background_image,
+        movedLogo,
         chroma = seriously.effect('chroma'),
         bleach = seriously.effect('bleach-bypass'),
         blend = seriously.effect('blend'),
@@ -39,6 +41,12 @@ require([
         target.height = target.width / aspect;
         reformatForOutput.width = target.width;
         reformatForOutput.height = target.height;
+
+        movedLogo.width = target.width / 100; // 494 x 256
+        movedLogo.height = (movedLogo.width / 494) * 256;
+
+        movedLogo.translateX = (-(target.width / 2) ) + (movedLogo.width / 2);
+        movedLogo.translateY = (target.height / 2) - ( movedLogo.height / 2);
     }
 
     function chromaMagic() {
@@ -46,7 +54,6 @@ require([
 
 // Create a source object by passing a CSS query string.
         original_image = seriously.source('#original_image');
-        var logo_image = seriously.source('#logo');
 
         scaleImage = seriously.transform('2d');
         scaleImage.source = original_image;
@@ -66,6 +73,9 @@ require([
 
         target = seriously.target('#canvas');
 
+
+// Apply all sorts of freakin' awesome effects !!!
+
         //little bit of bleaching to remove oversaturated reds etc...
         bleach.source = scaleImage;
         bleach.amount = 0.5;
@@ -75,7 +85,6 @@ require([
         chroma.screen = 'rgb(30, 222, 32)';
         chroma.clipWhite = '#clipWhite'; //The maximum resulting alpha value of keyed pixels
         chroma.clipBlack = '#clipBlack';  //The minimum resulting alpha value of keyed pixels
-
 
 
         chroma.source = bleach;
@@ -95,7 +104,20 @@ require([
 // connect any node as the source of the target. we only have one.
 
         reformatForOutput.source = blend;
-        target.source = reformatForOutput;
+
+        movedLogo = seriously.transform('2d');
+        movedLogo.source = logo_image;
+        movedLogo.translateX = -400;
+        movedLogo.translateY = 400;
+        movedLogo.scale(0.6);
+
+
+        //reinitialize blend to use it again to merge the logo onto the final image
+        blend = seriously.effect('blend');
+
+        blend.bottom = reformatForOutput;
+        blend.top = movedLogo;
+        target.source = blend;
 
         seriously.go(function (now) {
 
