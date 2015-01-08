@@ -29,14 +29,14 @@ app.get('/randomImage', function (req, res) {
 
     var count = req.query.count;
 
-    if(count === 'false'){
-        count=1;
+    if (count === 'false') {
+        count = 1;
     }
 
     fs.readdir(GREENSCREEN_DIR, function (err, files) {
         var randomIndex = count;
         var randomimage = files[randomIndex];
-        console.log('serving ' + GREENSCREEN_DIR + randomimage);
+//        console.log('serving ' + GREENSCREEN_DIR + randomimage);
         fs.readFile(GREENSCREEN_DIR + randomimage, function (err, data) {
             res.writeHead(200, {'Content-Type': 'image/jpeg'});
             res.end(data); // Send the file data to the browser.
@@ -49,7 +49,7 @@ app.get('/randomBackground', function (req, res) {
     fs.readdir(BACKGROUND_DIR, function (err, files) {
         var randomIndex = getRandom(0, (files.length - 1));
         var randomimage = files[randomIndex];
-        console.log('serving ' + BACKGROUND_DIR + randomimage);
+//        console.log('serving ' + BACKGROUND_DIR + randomimage);
         fs.readFile(BACKGROUND_DIR + randomimage, function (err, data) {
             if (path.extname(randomimage) == ".gif") {
                 res.writeHead(200, {'Content-Type': 'image/gif'});
@@ -61,19 +61,21 @@ app.get('/randomBackground', function (req, res) {
     });
 });
 
+
 app.get('/shareImage.png', function (req, res) {
 
-    var image = req.query.image
-        , background = req.query.background;
 
+    var image = req.query.image,
+        background = req.query.background;
 
     phantom.create(function (ph) {
         ph.createPage(function (page) {
-            page.open("http://localhost:9000#19", function (status) {
-                console.log("opened partypics? ", status);
-                page.render('shareImage.png');
-                ph.exit();
-
+            page.open("http://localhost:9000", function (status) {
+                setTimeout(function () {
+                    console.log("opened partypics? ", status);
+                    page.render('shareImage.png', {format: 'png', quality: '100'});
+                    ph.exit();
+                }, 500);
             });
         });
     });

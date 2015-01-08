@@ -1,4 +1,3 @@
-
 require.config({
     baseUrl: 'lib/seriouslyjs/'
 });
@@ -9,7 +8,6 @@ require([
     'effects/seriously.bleach-bypass',
     'effects/seriously.blend',
     'effects/seriously.ripple'
-
 
 ], function (Seriously) {
 
@@ -74,12 +72,11 @@ require([
         bleach.source = scaleImage;
         bleach.amount = 0.5;
 
-        chroma.weight = '#weight'; //how much of the screen color to remove from semi-transparent
-        chroma.balance = '#balance'; //it's complicated. Play with it.
-        chroma.screen = 'rgb(77, 239, 41)';
-        chroma.clipWhite = '#clipWhite'; //The maximum resulting alpha value of keyed pixels
-        chroma.clipBlack = '#clipBlack';  //The minimum resulting alpha value of keyed pixels
-
+        chroma.weight = 11.32; //how much of the screen color to remove from semi-transparent
+        chroma.balance = 0.58; //it's complicated. Play with it.
+        chroma.screen = 'rgb(30, 222, 32)';
+        chroma.clipWhite = 0; //The maximum resulting alpha value of keyed pixels
+        chroma.clipBlack = 1;  //The minimum resulting alpha value of keyed pixels
 
         chroma.source = bleach;
 
@@ -122,9 +119,8 @@ require([
         window.onresize = resize;
         StartForegroundLoop();
         StartBackgroundLoop();
-        startMusic();
+//        startMusic();
         sharePic();
-
     }
 
     function sharePic() {
