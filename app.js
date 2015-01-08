@@ -26,7 +26,7 @@ function startsWith(str, prefix) {
     return str.lastIndexOf(prefix, 0) === 0;
 }
 
-app.get('/shareImage', function(req,res){
+app.get('/shareImage.png', function(req,res){
     fs.readdir(SHARE_DIR, function (err, files) {
         var randomIndex = getRandom(0, (files.length - 1));
         var randomimage = files[randomIndex];
