@@ -8,6 +8,7 @@ var port = process.env.PORT || 9000; // set our port
 var app = express();
 const GREENSCREEN_DIR = 'public/images/greenscreens/';
 const BACKGROUND_DIR = 'public/images/backgrounds/';
+const SHARE_DIR = 'public/images/share/';
 var OG = require('express-metatag')('og');
 
 var express = require('express');
@@ -25,12 +26,12 @@ function startsWith(str, prefix) {
     return str.lastIndexOf(prefix, 0) === 0;
 }
 
-app.get('/shareImage.jpg', function(){
-    fs.readdir(BACKGROUND_DIR, function (err, files) {
+app.get('/shareImage', function(req,res){
+    fs.readdir(SHARE_DIR, function (err, files) {
         var randomIndex = getRandom(0, (files.length - 1));
         var randomimage = files[randomIndex];
-//        console.log('serving ' + BACKGROUND_DIR + randomimage);
-        fs.readFile(BACKGROUND_DIR + randomimage, function (err, data) {
+        fs.readFile(SHARE_DIR + randomimage, function (err, data) {
+                    console.log('serving ' + SHARE_DIR + randomimage);
             if (path.extname(randomimage) == ".gif") {
                 res.writeHead(200, {'Content-Type': 'image/gif'});
             } else {
