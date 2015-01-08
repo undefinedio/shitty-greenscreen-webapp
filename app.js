@@ -25,6 +25,22 @@ function startsWith(str, prefix) {
     return str.lastIndexOf(prefix, 0) === 0;
 }
 
+app.get('/shareImage.jpg', function(){
+    fs.readdir(BACKGROUND_DIR, function (err, files) {
+        var randomIndex = getRandom(0, (files.length - 1));
+        var randomimage = files[randomIndex];
+//        console.log('serving ' + BACKGROUND_DIR + randomimage);
+        fs.readFile(BACKGROUND_DIR + randomimage, function (err, data) {
+            if (path.extname(randomimage) == ".gif") {
+                res.writeHead(200, {'Content-Type': 'image/gif'});
+            } else {
+                res.writeHead(200, {'Content-Type': 'image/jpeg'});
+            }
+            res.end(data); // Send the file data to the browser.
+        });
+    });
+});
+
 app.get('/randomImage', function (req, res) {
 
     var count = req.query.count;
