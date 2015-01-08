@@ -46,6 +46,7 @@ require([
 
 // Create a source object by passing a CSS query string.
         original_image = seriously.source('#original_image');
+        var logo_image = seriously.source('#logo');
 
         scaleImage = seriously.transform('2d');
         scaleImage.source = original_image;
@@ -62,11 +63,8 @@ require([
 
 
         background_image = seriously.source('#background_image');
-// now do the same for the target canvas
+
         target = seriously.target('#canvas');
-
-
-// Apply all sorts of freakin' awesome effects !!!
 
         //little bit of bleaching to remove oversaturated reds etc...
         bleach.source = scaleImage;
@@ -249,7 +247,7 @@ require([
 
 document.cancelFullScreen = document.webkitExitFullscreen || document.mozCancelFullScreen || document.exitFullscreen;
 
-var elem = document.querySelector("#canvas");
+var elem = document.querySelector("body");
 
 document.addEventListener('keydown', function (e) {
     switch (e.keyCode) {
@@ -263,9 +261,15 @@ document.addEventListener('keydown', function (e) {
     }
 }, false);
 
+$('.btn-play').on('click', function (e) {
+    enterFullscreen();
+});
+
+
 // Called whenever the browser exits fullscreen.
 function onFullScreenExit() {
     console.log("Exited fullscreen");
+    $('body').removeClass('full-screen');
 }
 ;
 
@@ -278,6 +282,7 @@ function onFullScreenEnter() {
 // Note: FF nightly needs about:config full-screen-api.enabled set to true.
 function enterFullscreen() {
     console.log("enterFullscreen()");
+    $('body').addClass('full-screen');
     elem.onwebkitfullscreenchange = onFullScreenEnter;
     elem.onmozfullscreenchange = onFullScreenEnter;
     elem.onfullscreenchange = onFullScreenEnter;
@@ -290,7 +295,7 @@ function enterFullscreen() {
             elem.requestFullscreen();
         }
     }
-    document.getElementById('enter-exit-fs').onclick = exitFullscreen;
+//    document.getElementById('enter-exit-fs').onclick = exitFullscreen;
 }
 
 function exitFullscreen() {

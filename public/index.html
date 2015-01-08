@@ -14,6 +14,10 @@
             display: none;
         }
 
+        .full-screen .btn-play {
+            display: none;
+        }
+
         #canvas {
             position: absolute;
             top: 0;
@@ -119,6 +123,18 @@
             display: block !important;
             top: 12px;
         }
+
+        .btn-play {
+            top: 20px;
+            right: 20px;
+            position: absolute;
+            z-index: 100;
+            color: white;
+            font-size: 10px;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: block;
+        }
     </style>
 </head>
 
@@ -156,6 +172,10 @@
 
 <a href="#" id="next"><span>&#9758;</span> <span class="keys">use <br/>the arrowkeys</span></a>
 <a href="#" id="back"><span>&#9756;</span> <span class="keys">use <br/>the arrowkeys</span></a>
+
+<div class="btn-play">
+    &#9658; <span>play slideshow</span>
+</div>
 
 <div id="fblikebutton">
     SHARE THIS UGLY PIC WITH YOUR FRIEND
