@@ -72,11 +72,13 @@ require([
         bleach.source = scaleImage;
         bleach.amount = 0.5;
 
-        chroma.weight = 11.32; //how much of the screen color to remove from semi-transparent
-        chroma.balance = 0.58; //it's complicated. Play with it.
+        chroma.weight = '#weight'; //how much of the screen color to remove from semi-transparent
+        chroma.balance = '#balance'; //it's complicated. Play with it.
         chroma.screen = 'rgb(30, 222, 32)';
-        chroma.clipWhite = 0; //The maximum resulting alpha value of keyed pixels
-        chroma.clipBlack = 1;  //The minimum resulting alpha value of keyed pixels
+        chroma.clipWhite = '#clipWhite'; //The maximum resulting alpha value of keyed pixels
+        chroma.clipBlack = '#clipBlack';  //The minimum resulting alpha value of keyed pixels
+
+
 
         chroma.source = bleach;
 
