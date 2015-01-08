@@ -1,13 +1,14 @@
 var express = require('express')
     , fs = require('fs')
     , path = require('path')
+    , phantom = require('phantom')
     , bodyParser = require('body-parser');
 var port = process.env.PORT || 9000; // set our port
 
 var app = express();
 const GREENSCREEN_DIR = 'public/images/greenscreens/';
 const BACKGROUND_DIR = 'public/images/backgrounds/';
-var OG = require('express-metatag')('og')
+var OG = require('express-metatag')('og');
 
 var express = require('express');
 var app = express();
@@ -60,6 +61,23 @@ app.get('/randomBackground', function (req, res) {
     });
 });
 
+app.get('/shareImage.png', function (req, res) {
+
+    var image = req.query.image
+        , background = req.query.background;
+
+
+    phantom.create(function (ph) {
+        ph.createPage(function (page) {
+            page.open("http://localhost:9000#19", function (status) {
+                console.log("opened partypics? ", status);
+                page.render('shareImage.png');
+                ph.exit();
+
+            });
+        });
+    });
+});
 
 app.listen(port);
 console.log('Magic happens on port ' + port);
