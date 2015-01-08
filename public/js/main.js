@@ -156,8 +156,8 @@ require([
 
             title = encodeURIComponent("Shitty Party Gallery");
             descr = encodeURIComponent("This was the shitty party. The biggest muilfestijn from Antwerpen and surrounding parking. A big up to the Muiltatuli and the lovely crowd. See you next time!");
-            url = encodeURIComponent('https://shitty-partypics.herokuapp.com/#' + foregroundImage);
-            image = encodeURIComponent('https://shitty-partypics.herokuapp.com/randomImage?count=' + foregroundImage);
+            url = encodeURIComponent('https://partypics.shittyguide.org/#' + foregroundImage);
+            image = encodeURIComponent('https://partypics.shittyguide.org/shareImage.jpg');
 
             switch (social) {
                 case 'facebook':
