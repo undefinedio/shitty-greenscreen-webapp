@@ -54,6 +54,7 @@ require([
 
 // Create a source object by passing a CSS query string.
         original_image = seriously.source('#original_image');
+        logo_image = seriously.source('#logo');
 
         scaleImage = seriously.transform('2d');
         scaleImage.source = original_image;
