@@ -110,7 +110,7 @@ require([
         });
     }
 
-    var foregroundImage = 1,
+    var foregroundImage = 0,
         maxforegroundImages = 127;
 
     function init($) {
@@ -119,7 +119,7 @@ require([
         window.onresize = resize;
         StartForegroundLoop();
         StartBackgroundLoop();
-//        startMusic();
+        startMusic();
         sharePic();
     }
 
