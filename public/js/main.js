@@ -108,9 +108,9 @@ require([
 
         movedLogo = seriously.transform('2d');
         movedLogo.source = logo_image;
-        movedLogo.translateX = -400;
-        movedLogo.translateY = 400;
-        movedLogo.scale(0.6);
+        movedLogo.translateX = -500;
+        movedLogo.translateY = 500;
+        movedLogo.scale(0.8);
 
 
         //reinitialize blend to use it again to merge the logo onto the final image
