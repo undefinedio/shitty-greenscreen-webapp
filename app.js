@@ -20,9 +20,17 @@ function getRandom(min, max) {
 
 var count = 0;
 
+function startsWith(str, prefix) {
+    return str.lastIndexOf(prefix, 0) === 0;
+}
+
 app.get('/randomImage', function (req, res) {
 
     var count = req.query.count;
+
+    if(count === 'false'){
+        count=1;
+    }
 
     fs.readdir(GREENSCREEN_DIR, function (err, files) {
         var randomIndex = count;
@@ -32,8 +40,6 @@ app.get('/randomImage', function (req, res) {
             res.writeHead(200, {'Content-Type': 'image/jpeg'});
             res.end(data); // Send the file data to the browser.
         });
-
-
     });
 });
 
