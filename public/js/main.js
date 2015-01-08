@@ -158,7 +158,7 @@ require([
             title = encodeURIComponent("Shitty Party Gallery");
             descr = encodeURIComponent("This was the shitty party. The biggest muilfestijn from Antwerpen and surrounding parking. A big up to the Muiltatuli and the lovely crowd. See you next time!");
             url = encodeURIComponent('https://partypics.shittyguide.org/#' + foregroundImage);
-            image = encodeURIComponent('http://partypics.shittyguide.org/images/share.jpg');
+            image = encodeURIComponent('http://partypics.shittyguide.org/images/share-shitty.jpg');
 
             switch (social) {
                 case 'facebook':
