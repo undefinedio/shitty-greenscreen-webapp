@@ -15,6 +15,7 @@ require([
     var backgroundImage = 1;
     var $loadingPicture;
 
+
     var foregroundTimer = 2000;
     var backgroundTimerMultiplier = 3;
     var updown, diff;
@@ -247,6 +248,7 @@ require([
 
     }
 
+
     function loadImage(src, loaded) {
         var image = new Image();
         image.onload = function () {
@@ -301,7 +303,7 @@ require([
 
 document.cancelFullScreen = document.webkitExitFullscreen || document.mozCancelFullScreen || document.exitFullscreen;
 
-var elem = document.querySelector("body");
+var elem = document.querySelector("body"), slideshow = null;
 
 document.addEventListener('keydown', function (e) {
     switch (e.keyCode) {
@@ -315,15 +317,31 @@ document.addEventListener('keydown', function (e) {
     }
 }, false);
 
+
 $('.btn-play').on('click', function (e) {
     enterFullscreen();
 });
+
+function startSlideShow() {
+    slideshow = setInterval(function () {
+        $('#next').click();
+
+    }, 3000);
+
+};
+
+
+function stopSlideShow() {
+    console.log("SlideShow Stopped");
+    clearTimeout(slideshow);
+}
 
 
 // Called whenever the browser exits fullscreen.
 function onFullScreenExit() {
     console.log("Exited fullscreen");
     $('body').removeClass('full-screen');
+    stopSlideShow();
 }
 ;
 
@@ -331,8 +349,8 @@ function onFullScreenEnter() {
     console.log("Entered fullscreen!");
     elem.onwebkitfullscreenchange = onFullScreenExit;
     elem.onmozfullscreenchange = onFullScreenExit;
-}
-;
+    startSlideShow();
+};
 // Note: FF nightly needs about:config full-screen-api.enabled set to true.
 function enterFullscreen() {
     console.log("enterFullscreen()");
