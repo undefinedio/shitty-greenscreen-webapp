@@ -189,9 +189,7 @@ require([
         window.history.pushState(null, null, '#' + foregroundImage);
 
         loadImage('/randomImage?count=' + foregroundImage, function () {
-
             $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
-            $loadingPicture.fadeOut();
         });
     }
 
@@ -206,7 +204,6 @@ require([
 
         loadImage('/randomImage?count=' + foregroundImage, function () {
             $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
-            $loadingPicture.fadeOut();
         });
     }
 
@@ -225,13 +222,11 @@ require([
 
         $('#next').on('click', function (e) {
             e.preventDefault();
-            $loadingPicture.fadeIn();
             nextPic();
         });
 
 
         $('#back').on('click', function (e) {
-            $loadingPicture.fadeIn();
             e.preventDefault();
             prevPic();
         });
@@ -251,9 +246,12 @@ require([
 
     function loadImage(src, loaded) {
         var image = new Image();
+
+        showLoading ? $loadingPicture.fadeIn() : '';
         image.onload = function () {
             console.info("Image loaded !");
             //do something...
+            showLoading ? $loadingPicture.fadeOut() : '';
             loaded();
         };
         image.onerror = function () {
@@ -293,7 +291,6 @@ require([
 
     $(function ($) {
         $loadingPicture = $("#loading_image");
-        $loadingPicture.fadeIn();
         init();
         $loadingPicture.fadeOut();
     });
@@ -303,7 +300,7 @@ require([
 
 document.cancelFullScreen = document.webkitExitFullscreen || document.mozCancelFullScreen || document.exitFullscreen;
 
-var elem = document.querySelector("body"), slideshow = null;
+var elem = document.querySelector("body"), slideshow = null, showLoading = true;
 
 document.addEventListener('keydown', function (e) {
     switch (e.keyCode) {
@@ -323,6 +320,7 @@ $('.btn-play').on('click', function (e) {
 });
 
 function startSlideShow() {
+    showLoading = false;
     slideshow = setInterval(function () {
         $('#next').click();
 
@@ -332,6 +330,7 @@ function startSlideShow() {
 
 
 function stopSlideShow() {
+    showLoading = true;
     console.log("SlideShow Stopped");
     clearTimeout(slideshow);
 }
