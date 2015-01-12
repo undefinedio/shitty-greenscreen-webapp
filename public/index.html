@@ -100,6 +100,15 @@
             margin-bottom: 15px;
         }
 
+        #loading_image {
+            z-index: 9999;
+            position: absolute;
+            left: 50%;
+            margin-left: -100px;
+            top: 50%;
+            margin-top: -100px;
+        }
+
         .btn-share {
             z-index: 100;
             position: relative;
@@ -169,6 +178,7 @@
 <img src="images/muile.png" class='muile' id="logo" alt=""/>
 <img src="/randomImage?count=false" id="original_image"/>
 <img src="/randomBackground" id="background_image"/>
+<img src="images/loading.gif" id="loading_image"/>
 
 <a href="#" id="next"><span>&#9758;</span> <span class="keys">use <br/>the arrowkeys</span></a>
 <a href="#" id="back"><span>&#9756;</span> <span class="keys">use <br/>the arrowkeys</span></a>

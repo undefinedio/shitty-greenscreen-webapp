@@ -13,6 +13,7 @@ require([
 
     var foregroundImage = 1;
     var backgroundImage = 1;
+    var $loadingPicture;
 
     var foregroundTimer = 2000;
     var backgroundTimerMultiplier = 3;
@@ -55,6 +56,7 @@ require([
 // Create a source object by passing a CSS query string.
         original_image = seriously.source('#original_image');
         logo_image = seriously.source('#logo');
+        //loading_image = seriously.source('#loading_image');
 
         scaleImage = seriously.transform('2d');
         scaleImage.source = original_image;
@@ -176,7 +178,7 @@ require([
         return min + Math.floor(Math.random() * (max - min + 1));
     }
 
-    function nextPic() {
+    function nextPic(cb) {
         if (foregroundImage < maxforegroundImages) {
             foregroundImage++;
         } else {
@@ -184,10 +186,15 @@ require([
         }
 
         window.history.pushState(null, null, '#' + foregroundImage);
-        $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
+
+        loadImage('/randomImage?count=' + foregroundImage, function () {
+
+            $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
+            $loadingPicture.fadeOut();
+        });
     }
 
-    function prevPic() {
+    function prevPic(cb) {
         if (foregroundImage > 1) {
             foregroundImage--;
         } else {
@@ -195,7 +202,11 @@ require([
         }
 
         window.history.pushState(null, null, '#' + foregroundImage);
-        $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
+
+        loadImage('/randomImage?count=' + foregroundImage, function () {
+            $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
+            $loadingPicture.fadeOut();
+        });
     }
 
 
@@ -213,11 +224,13 @@ require([
 
         $('#next').on('click', function (e) {
             e.preventDefault();
+            $loadingPicture.fadeIn();
             nextPic();
         });
 
 
         $('#back').on('click', function (e) {
+            $loadingPicture.fadeIn();
             e.preventDefault();
             prevPic();
         });
@@ -232,6 +245,21 @@ require([
             }
         });
 
+    }
+
+    function loadImage(src, loaded) {
+        var image = new Image();
+        image.onload = function () {
+            console.info("Image loaded !");
+            //do something...
+            loaded();
+        };
+        image.onerror = function () {
+            console.error("Cannot load image");
+            //do something else...
+        };
+        image.src = src;
+        return image;
     }
 
     function changeBackground() {
@@ -261,8 +289,11 @@ require([
         $("body").append('<iframe style="display: none;" width="100%" height="100%" frameborder="0" scrolling="yes" allowtransparency="true" src="//www.youtube.com/embed/' + randMusic + '?autoplay=1&loop=1&playlist=PL759KJQCqtrxBXCyRgWw9w7plLCVsavBY"></iframe>');
     }
 
-    $(function () {
+    $(function ($) {
+        $loadingPicture = $("#loading_image");
+        $loadingPicture.fadeIn();
         init();
+        $loadingPicture.fadeOut();
     });
 
 });
