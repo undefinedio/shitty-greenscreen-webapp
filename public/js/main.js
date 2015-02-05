@@ -8,7 +8,6 @@ require([
     'effects/seriously.bleach-bypass',
     'effects/seriously.blend',
     'effects/seriously.ripple'
-
 ], function (Seriously) {
 
     var foregroundImage = 1;
@@ -54,7 +53,7 @@ require([
     function chromaMagic() {
 
 
-// Create a source object by passing a CSS query string.
+        // Create a source object by passing a CSS query string.
         original_image = seriously.source('#original_image');
         logo_image = seriously.source('#logo');
         //loading_image = seriously.source('#loading_image');
@@ -78,7 +77,7 @@ require([
         target = seriously.target('#canvas');
 
 
-// Apply all sorts of freakin' awesome effects !!!
+        // Apply all sorts of freakin' awesome effects !!!
 
         //little bit of bleaching to remove oversaturated reds etc...
         bleach.source = scaleImage;
