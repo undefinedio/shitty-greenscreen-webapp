@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shitty Party Pics</title>
+    <meta property="og:title" content="Shitty Party Pics"/>
+    <meta property="fb:app_id" content="724923360853864"/>
+    <meta property="fb:admins" content="729639607"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image" content="http://partypics.shittyguide.org/images/share-shitty.jpg"/>
+    <meta property="og:site_name" content="Shitty Party Pics"/>
+    <meta property="og:description"
+          content="This was the shitty party. The biggest muilfestijn from Antwerpen and surrounding parking. A big up to the Muiltatuli and the lovely crowd. See you next time!"/>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <style type="text/css">
+        img, video {
+            display: none;
+        }
+
+        .full-screen .btn-play {
+            display: none;
+        }
+
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 0;
+            /*left: 0;*/
+            right: 0;
+            color: white;
+            opacity: 0;
+        }
+
+        #back, #next {
+            color: white;
+            font-size: 72px;
+            position: absolute;
+            top: 50%;
+            z-index: 100;
+            -webkit-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            -o-transform: translateY(-50%);
+            transform: translateY(-50%);
+            text-decoration: none;
+        }
+
+        a:hover .keys {
+            display: block;
+            font-size: 10px;
+            text-align: center;
+            text-transform: uppercase;
+            color: #0000ff;
+        }
+
+        .keys {
+            display: none;
+            position: absolute;
+        }
+
+        #next {
+            right: 9px;
+        }
+
+        #fblikebutton {
+            z-index: 100;
+            position: absolute !important;
+            bottom: 10px;
+            left: 20px;
+            color: white;
+            font-size: 10px;
+        }
+
+        .shitty-logo {
+            display: block;
+            z-index: 100;
+            position: absolute;
+            bottom: 0px;
+            width: 99px;
+            right: 20px;
+            text-align: center;
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 10px;
+        }
+
+        .shitty-logo img {
+            width: 99px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        #loading_image {
+            z-index: 9999;
+            position: absolute;
+            left: 50%;
+            margin-left: -100px;
+            top: 50%;
+            margin-top: -100px;
+        }
+
+        .btn-share {
+            z-index: 100;
+            position: relative;
+            color: white;
+            font-size: 30px;
+            display: inline-block;
+            margin-left: 8px;
+            vertical-align: middle;
+            cursor: pointer;
+            top: -2px;
+        }
+
+        .btn-share:hover {
+            color: #0000ff;
+        }
+
+        .fb-like {
+            clear: both;
+            display: block !important;
+            top: 12px;
+        }
+
+        .btn-play {
+            top: 20px;
+            right: 20px;
+            position: absolute;
+            z-index: 100;
+            color: white;
+            font-size: 10px;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: block;
+        }
+
+        .modern-browser {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .modern-browser h1 {
+            font-size: 16px;
+            text-transform: uppercase;
+            text-align: left;
+            color: #0000ff;
+        }
+
+        body {
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body style="height: 100%;width: 100%;">
+<div id="fb-root"></div>
+<script>
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '724923360853864',
+            xfbml: true,
+            version: 'v2.1'
+        });
+    };
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=724923360853864";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="modern-browser">
+    <h1>
+        BITCH PLZ, USE GOOGLE CHROME
+    </h1>
+</div>
+
+<div class="shitty-logo">
+    <a href="http://shittyguide.org" target="_blank">
+        <img src="images/shittyguide.png" alt=""/>
+    </a>
+    <a href="http://weareundefined.be">
+        <img src="images/gmail-logo.png" alt=""/>
+    </a>
+
+</div>
+
+<img src="images/maf-logo-combined.png" class='muile' id="logo" alt=""/>
+<img src="/randomImageWAF?count=false" id="original_image"/>
+<img src="/randomBackgroundWAF" id="background_image"/>
+<img src="images/loading.gif" id="loading_image"/>
+
+<a href="#" id="next" style="visibility: hidden"><span>&#9758;</span> <span
+        class="keys">use <br/>the arrowkeys</span></a>
+<a href="#" id="back" style="visibility: hidden"><span>&#9756;</span> <span
+        class="keys">use <br/>the arrowkeys</span></a>
+
+<div class="btn-play">
+    &#9658; <span>play slideshow</span>
+</div>
+
+
+<canvas id="canvas" width="800" height="800"></canvas>
+
+<div id="controls">
+    <div>
+        <label for="weight">Weight</label>
+        <input type="range" id="weight" min="0" max="20" step="0.01" value="11.32"/>
+    </div>
+    <div>
+        <label for="balance">Balance</label>
+        <input type="range" id="balance" min="0" max="1" step="0.001" value="0.58"/>
+    </div>
+    <div>
+        <label for="clipWhite">clipWhite</label>
+        <input type="range" id="clipWhite" min="0" max="1" step="0.001" value="0"/></div>
+    <div>
+        <label for="clipBlack">clipBlack</label>
+        <input type="range" id="clipBlack" min="0" max="1" step="0.001" value="1"/>
+    </div>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="./lib/seriouslyjs/lib/require.js"></script>
+
+<script>
+
+    $(function ($) {
+        $('input').on('change', function () {
+            print.call($(this));
+        });
+        function print() {
+            console.log(this.attr('id') + ' -> ' + this.val());
+        }
+    });
+
+</script>
+<script src="js/main.js"></script>
+</body>
+</html>

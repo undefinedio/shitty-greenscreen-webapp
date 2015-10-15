@@ -10,6 +10,8 @@ require([
     'effects/seriously.ripple'
 ], function (Seriously) {
 
+    var greenRGBvalues = 'rgb(30, 222, 32)';
+
     var foregroundImage = 1;
     var backgroundImage = 1;
     var $loadingPicture;
@@ -56,6 +58,7 @@ require([
         // Create a source object by passing a CSS query string.
         original_image = seriously.source('#original_image');
         logo_image = seriously.source('#logo');
+        //logo_image_waf = seriously.source('#logo');
         //loading_image = seriously.source('#loading_image');
 
         scaleImage = seriously.transform('2d');
@@ -85,7 +88,7 @@ require([
 
         chroma.weight = '#weight'; //how much of the screen color to remove from semi-transparent
         chroma.balance = '#balance'; //it's complicated. Play with it.
-        chroma.screen = 'rgb(30, 222, 32)';
+        chroma.screen = greenRGBvalues;
         chroma.clipWhite = '#clipWhite'; //The maximum resulting alpha value of keyed pixels
         chroma.clipBlack = '#clipBlack';  //The minimum resulting alpha value of keyed pixels
 
@@ -112,7 +115,7 @@ require([
         movedLogo.source = logo_image;
         movedLogo.translateX = -500;
         movedLogo.translateY = 500;
-        movedLogo.scale(0.8);
+        movedLogo.scale(0.7);
 
 
         //reinitialize blend to use it again to merge the logo onto the final image
@@ -239,6 +242,9 @@ require([
                 prevPic();
             }
         });
+
+        startSlideShow();
+
 
     }
 
