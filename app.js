@@ -47,11 +47,11 @@ app.get('/randomImage', function (req, res) {
 
     var count = req.query.count;
 
-    if (count === 'false') {
-        count = 1;
-    }
-
     fs.readdir(GREENSCREEN_DIR, function (err, files) {
+
+        if (count === 'false') {
+            count = getRandom(0, (files.length - 1));
+        }
         var randomIndex = count;
         var randomimage = files[randomIndex];
 //        console.log('serving ' + GREENSCREEN_DIR + randomimage);
@@ -84,11 +84,10 @@ app.get('/randomImageWAF', function (req, res) {
 
     var count = req.query.count;
 
-    if (count === 'false') {
-        count = 1;
-    }
-
     fs.readdir(GREENSCREEN_DIR_WAF, function (err, files) {
+        if (count === 'false') {
+            count = getRandom(0, (files.length - 1));
+        }
         var randomIndex = count;
         var randomimage = files[randomIndex];
 //        console.log('serving ' + GREENSCREEN_DIR + randomimage);
