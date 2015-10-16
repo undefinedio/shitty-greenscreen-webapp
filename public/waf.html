@@ -34,10 +34,10 @@
         #controls {
             position: absolute;
             bottom: 0;
-            /*left: 0;*/
+            left: 0;
             right: 0;
             color: white;
-            opacity: 0;
+            /*opacity: 0;*/
         }
 
         #back, #next {
@@ -218,18 +218,18 @@
 <div id="controls">
     <div>
         <label for="weight">Weight</label>
-        <input type="range" id="weight" min="0" max="20" step="0.01" value="11.32"/>
+        <input type="range" id="weight" min="0" max="20" step="0.01" value="20"/>
     </div>
     <div>
         <label for="balance">Balance</label>
-        <input type="range" id="balance" min="0" max="1" step="0.001" value="0.58"/>
+        <input type="range" id="balance" min="0" max="1" step="0.001" value="0.203"/>
     </div>
     <div>
         <label for="clipWhite">clipWhite</label>
-        <input type="range" id="clipWhite" min="0" max="1" step="0.001" value="0"/></div>
+        <input type="range" id="clipWhite" min="0" max="1" step="0.001" value="1"/></div>
     <div>
         <label for="clipBlack">clipBlack</label>
-        <input type="range" id="clipBlack" min="0" max="1" step="0.001" value="1"/>
+        <input type="range" id="clipBlack" min="0" max="1" step="0.001" value="0"/>
     </div>
 </div>
 
@@ -248,6 +248,6 @@
     });
 
 </script>
-<script src="js/main.js"></script>
+<script src="js/main_waf.js"></script>
 </body>
 </html>

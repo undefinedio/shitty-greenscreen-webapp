@@ -10,7 +10,8 @@ require([
     'effects/seriously.ripple'
 ], function (Seriously) {
 
-    var greenRGBvalues = 'rgb(58, 159, 58)';
+    //var greenRGBvalues = 'rgb(52, 159, 50)';
+    var greenRGBvalues = 'rgb(51, 147, 51)';
 
     var foregroundImage = 1;
     var backgroundImage = 1;
@@ -25,7 +26,8 @@ require([
         logo_image,      // a wrapper object for our logo image
         original_image, // a wrapper object for our source image
         background_image,
-        movedLogo,
+        movedLogo, scaleImage,
+        reformatForOutput,
         chroma = seriously.effect('chroma'),
         bleach = seriously.effect('bleach-bypass'),
         blend = seriously.effect('blend'),
@@ -67,11 +69,9 @@ require([
         original_image = scaleImage;
 
 
-        reformat = seriously.transform('reformat');
         reformatForOutput = seriously.transform('reformat');
-        reformat.width = 1280;
-        reformat.height = 720;
-        reformat.mode = 'none';
+        reformatForOutput.height = 1280;
+        reformatForOutput.width = 720;
         reformatForOutput.mode = 'cover';
 
 
@@ -99,7 +99,7 @@ require([
         moveMask.source = chroma;
         moveMask.translateX = 0;
         moveMask.translateY = -100;
-        moveMask.scale(1);
+        moveMask.scale(0.8);
 
         ripple.source = background_image;
 
@@ -147,7 +147,6 @@ require([
         window.onresize = resize;
         StartForegroundLoop();
         StartBackgroundLoop();
-        startMusic();
         sharePic();
     }
 
@@ -190,8 +189,8 @@ require([
 
         window.history.pushState(null, null, '#' + foregroundImage);
 
-        loadImage('/randomImage?count=' + foregroundImage, function () {
-            $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
+        loadImage('/randomImageWAF?count=' + foregroundImage, function () {
+            $('#original_image').attr('src', '/randomImageWAF?count=' + foregroundImage);
         });
     }
 
@@ -204,8 +203,8 @@ require([
 
         window.history.pushState(null, null, '#' + foregroundImage);
 
-        loadImage('/randomImage?count=' + foregroundImage, function () {
-            $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
+        loadImage('/randomImageWAF?count=' + foregroundImage, function () {
+            $('#original_image').attr('src', '/randomImageWAF?count=' + foregroundImage);
         });
     }
 
@@ -220,7 +219,7 @@ require([
         }
 
         window.history.pushState(null, null, '#' + foregroundImage);
-        $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
+        $('#original_image').attr('src', '/randomImageWAF?count=' + foregroundImage);
 
         $('#next').on('click', function (e) {
             e.preventDefault();
@@ -268,7 +267,7 @@ require([
     }
 
     function changeBackground() {
-        $('#background_image').attr('src', '/randomBackground?count=' + backgroundImage);
+        $('#background_image').attr('src', '/randomBackgroundWAF?count=' + backgroundImage);
         backgroundImage++;
     }
 

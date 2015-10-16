@@ -1,7 +1,7 @@
 var express = require('express')
     , fs = require('fs')
     , path = require('path')
-    , phantom = require('phantom')
+    , Jimp = require('jimp')
     , bodyParser = require('body-parser');
 var port = process.env.PORT || 9000; // set our port
 
@@ -9,17 +9,16 @@ var app = express();
 const GREENSCREEN_DIR = 'public/images/greenscreens/';
 const BACKGROUND_DIR = 'public/images/backgrounds/';
 
-const GREENSCREEN_DIR_WAF = 'public/images/greenscreens/';
-const BACKGROUND_DIR_WAF = 'public/images/backgrounds/';
+const GREENSCREEN_DIR_WAF = 'public/images/greenscreens_maf/';
+const BACKGROUND_DIR_WAF = 'public/images/backgrounds_maf/';
 
 
 const SHARE_DIR = 'public/images/share/';
-var OG = require('express-metatag')('og');
 
 var express = require('express');
 var app = express();
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static('public'));
 
 function getRandom(min, max) {
     return min + Math.floor(Math.random() * (max - min + 1));
@@ -68,7 +67,9 @@ app.get('/randomBackground', function (req, res) {
     fs.readdir(BACKGROUND_DIR, function (err, files) {
         var randomIndex = getRandom(0, (files.length - 1));
         var randomimage = files[randomIndex];
-//        console.log('serving ' + BACKGROUND_DIR + randomimage);
+        if (randomimage == '.DS_Store') {
+            randomimage = files[randomIndex + 1];
+        }
         fs.readFile(BACKGROUND_DIR + randomimage, function (err, data) {
             if (path.extname(randomimage) == ".gif") {
                 res.writeHead(200, {'Content-Type': 'image/gif'});
@@ -81,44 +82,63 @@ app.get('/randomBackground', function (req, res) {
 });
 
 app.get('/randomImageWAF', function (req, res) {
+    var DIR = GREENSCREEN_DIR_WAF;
 
-    var count = req.query.count;
-
-    fs.readdir(GREENSCREEN_DIR_WAF, function (err, files) {
-        if (count === 'false') {
-            count = getRandom(0, (files.length - 1));
-        }
-        var randomIndex = count;
+    fs.readdir(DIR, function (err, files) {
+        var randomIndex = getRandom(0, (files.length - 1));
         var randomimage = files[randomIndex];
-//        console.log('serving ' + GREENSCREEN_DIR + randomimage);
-        fs.readFile(GREENSCREEN_DIR_WAF + randomimage, function (err, data) {
+        console.log('serving ' + DIR + randomimage);
+        if (randomimage == '.DS_Store') {
+            randomimage = files[randomIndex + 1];
+        }
+        var image = new Jimp(DIR + randomimage, function (err, image) {
+
             res.writeHead(200, {'Content-Type': 'image/jpeg'});
-            res.end(data); // Send the file data to the browser.
+            this.clone().resize(720, Jimp.AUTO).getBuffer('image/jpeg', function (err, buffer) {
+                // buffer is JPEG as a buffer
+                res.end(buffer);
+            });
         });
     });
 });
 
+
 app.get('/randomBackgroundWAF', function (req, res) {
+    var targetHeight = 1000,
+        targetWidth = Jimp.AUTO;
 
     fs.readdir(BACKGROUND_DIR_WAF, function (err, files) {
         var randomIndex = getRandom(0, (files.length - 1));
         var randomimage = files[randomIndex];
-//        console.log('serving ' + BACKGROUND_DIR + randomimage);
-        fs.readFile(BACKGROUND_DIR_WAF + randomimage, function (err, data) {
+        console.log('serving ' + BACKGROUND_DIR + randomimage);
+        if (randomimage == '.DS_Store') {
+            randomimage = files[randomIndex + 1];
+        }
+
+        var image = new Jimp(BACKGROUND_DIR_WAF + randomimage, function (err, image) {
+
+            if (err) throw err;
+
             if (path.extname(randomimage) == ".gif") {
                 res.writeHead(200, {'Content-Type': 'image/gif'});
+                this.clone().resize(targetWidth, targetHeight).getBuffer('image/gif', function (err, buffer) {
+                    // buffer is JPEG as a buffer
+                    res.end(buffer);
+                });
+
             } else {
                 res.writeHead(200, {'Content-Type': 'image/jpeg'});
+                this.clone().resize(targetWidth, targetHeight).getBuffer('image/jpeg', function (err, buffer) {
+                    // buffer is JPEG as a buffer
+                    res.end(buffer);
+                });
             }
-            res.end(data); // Send the file data to the browser.
         });
     });
 });
 
 
 app.get('/shareImage.png', function (req, res) {
-
-
     var image = req.query.image,
         background = req.query.background;
 
