@@ -10,12 +10,11 @@ require([
     'effects/seriously.ripple'
 ], function (Seriously) {
 
-    var greenRGBvalues = 'rgb(58, 159, 58)';
+    var greenRGBvalues = 'rgb(30, 222, 32)';
 
     var foregroundImage = 1;
     var backgroundImage = 1;
     var $loadingPicture;
-
 
     var foregroundTimer = 2000;
     var backgroundTimerMultiplier = 3;
@@ -45,16 +44,14 @@ require([
         reformatForOutput.width = target.width;
         reformatForOutput.height = target.height;
 
-        movedLogo.width = target.width / 100; // 494 x 256
-        movedLogo.height = (movedLogo.width / 494) * 256;
+        // movedLogo.width = target.width / 100; // 494 x 256
+        // movedLogo.height = (movedLogo.width / 494) * 256;
 
-        movedLogo.translateX = (-(target.width / 2) ) + (movedLogo.width / 2);
-        movedLogo.translateY = (target.height / 2) - ( movedLogo.height / 2);
+        // movedLogo.translateX = (-(target.width / 2) ) + (movedLogo.width / 2);
+        // movedLogo.translateY = (target.height / 2) - ( movedLogo.height / 2);
     }
 
     function chromaMagic() {
-
-
         // Create a source object by passing a CSS query string.
         original_image = seriously.source('#original_image');
         logo_image = seriously.source('#logo');
@@ -66,7 +63,6 @@ require([
         scaleImage.scale(1000 / 1000);
         original_image = scaleImage;
 
-
         reformat = seriously.transform('reformat');
         reformatForOutput = seriously.transform('reformat');
         reformat.width = 1280;
@@ -74,11 +70,9 @@ require([
         reformat.mode = 'none';
         reformatForOutput.mode = 'cover';
 
-
         background_image = seriously.source('#background_image');
 
         target = seriously.target('#canvas');
-
 
         // Apply all sorts of freakin' awesome effects !!!
 
@@ -91,7 +85,6 @@ require([
         chroma.screen = greenRGBvalues;
         chroma.clipWhite = '#clipWhite'; //The maximum resulting alpha value of keyed pixels
         chroma.clipBlack = '#clipBlack';  //The minimum resulting alpha value of keyed pixels
-
 
         chroma.source = bleach;
 
@@ -108,7 +101,6 @@ require([
         blend.top = moveMask;
 
 // connect any node as the source of the target. we only have one.
-
         reformatForOutput.source = blend;
 
         movedLogo = seriously.transform('2d');
@@ -116,7 +108,6 @@ require([
         movedLogo.translateX = -500;
         movedLogo.translateY = 500;
         movedLogo.scale(0.7);
-
 
         //reinitialize blend to use it again to merge the logo onto the final image
         blend = seriously.effect('blend');
@@ -126,7 +117,6 @@ require([
         target.source = blend;
 
         seriously.go(function (now) {
-
             diff = ((now - lastFrameTime) / 1000);
 
             updown = (Math.sin((diff))) * 50;
@@ -134,7 +124,6 @@ require([
 
             ripple.wave = Math.abs(Math.sin(now / 2000 / 4));
             ripple.distortion = Math.abs(Math.sin(now / 1000 / 4.5)) * 2;
-
         });
     }
 
@@ -147,34 +136,7 @@ require([
         window.onresize = resize;
         StartForegroundLoop();
         StartBackgroundLoop();
-        startMusic();
-        sharePic();
-    }
-
-    function sharePic() {
-
-        $('.btn-share').on('click', function () {
-            var social = $(this).data("share");
-            var winWidth = 370;
-            var winHeight = 320;
-            var winTop = (screen.height / 2) - (winHeight / 2);
-            var winLeft = (screen.width / 2) - (winWidth / 2);
-
-            title = encodeURIComponent("Shitty Party Gallery");
-            descr = encodeURIComponent("This was the shitty party. The biggest muilfestijn from Antwerpen and surrounding parking. A big up to the Muiltatuli and the lovely crowd. See you next time!");
-            url = encodeURIComponent('https://partypics.shittyguide.org/#' + foregroundImage);
-            image = encodeURIComponent('http://partypics.shittyguide.org/images/share-shitty.jpg');
-
-            switch (social) {
-                case 'facebook':
-                    window.open('http://www.facebook.com/sharer.php?s=100&p[title]=' + title + '&p[summary]=' + descr + '&p[url]=' + url + '&p[images][0]=' + image, 'sharer', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=' + winWidth + ',height=' + winHeight);
-                    break;
-                case 'twitter':
-                    window.open('http://www.twitter.com/share?text=' + descr + ' #shittyguide #antwerpen', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=' + winWidth + ',height=' + winHeight);
-                    break;
-            }
-        });
-
+        //sharePic();
     }
 
     function getRandom(min, max) {
@@ -188,7 +150,7 @@ require([
             foregroundImage = 1;
         }
 
-        window.history.pushState(null, null, '#' + foregroundImage);
+       // window.history.pushState(null, null, '#' + foregroundImage);
 
         loadImage('/randomImage?count=' + foregroundImage, function () {
             $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
@@ -202,7 +164,7 @@ require([
             foregroundImage = maxforegroundImages;
         }
 
-        window.history.pushState(null, null, '#' + foregroundImage);
+        //window.history.pushState(null, null, '#' + foregroundImage);
 
         loadImage('/randomImage?count=' + foregroundImage, function () {
             $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
@@ -219,7 +181,7 @@ require([
             foregroundImage = type;
         }
 
-        window.history.pushState(null, null, '#' + foregroundImage);
+        // window.history.pushState(null, null, '#' + foregroundImage);
         $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
 
         $('#next').on('click', function (e) {
@@ -243,11 +205,12 @@ require([
             }
         });
 
-        startSlideShow();
+        showLoading = false;
 
-
+        slideshow = setInterval(function () {
+            nextPic();
+        }, 3000);
     }
-
 
     function loadImage(src, loaded) {
         var image = new Image();
@@ -299,9 +262,7 @@ require([
         init();
         $loadingPicture.fadeOut();
     });
-
 });
-
 
 document.cancelFullScreen = document.webkitExitFullscreen || document.mozCancelFullScreen || document.exitFullscreen;
 
@@ -327,12 +288,11 @@ $('.btn-play').on('click', function (e) {
 function startSlideShow() {
     showLoading = false;
     slideshow = setInterval(function () {
-        $('#next').click();
+        console.log('test');
+        nextPic();
 
     }, 3000);
-
-};
-
+}
 
 function stopSlideShow() {
     showLoading = true;
@@ -340,21 +300,19 @@ function stopSlideShow() {
     clearTimeout(slideshow);
 }
 
-
 // Called whenever the browser exits fullscreen.
 function onFullScreenExit() {
     console.log("Exited fullscreen");
     $('body').removeClass('full-screen');
     stopSlideShow();
 }
-;
 
 function onFullScreenEnter() {
     console.log("Entered fullscreen!");
     elem.onwebkitfullscreenchange = onFullScreenExit;
     elem.onmozfullscreenchange = onFullScreenExit;
     startSlideShow();
-};
+}
 // Note: FF nightly needs about:config full-screen-api.enabled set to true.
 function enterFullscreen() {
     console.log("enterFullscreen()");
