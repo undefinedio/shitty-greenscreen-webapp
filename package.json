@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "main": "app.js",
   "engines": {
-    "node": "0.10.x"
+    "node": "0.10.x",
+    "npm": "1.2.14"
   },
   "scripts": {
     "start": "node app.js",
