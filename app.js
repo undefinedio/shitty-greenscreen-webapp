@@ -15,8 +15,6 @@ const BACKGROUND_DIR_CRUISE = 'public/images/background_cruise/';
 
 const SHARE_DIR = 'public/images/share/';
 
-var express = require('express');
-var app = express();
 
 app.use(express.static('public'));
 
@@ -56,6 +54,14 @@ app.get('/randomImage', function (req, res) {
             res.end(data); // Send the file data to the browser.
         });
     });
+});
+
+app.get('/randomImageFromCloud', function (req, res) {
+    fetch(`https://us-central1-shitty-radar.cloudfunctions.net/getImage`)
+    .then(response => response.json())
+        .then(data => {
+            res.send(data); // Send the file data to the browser.
+        })
 });
 
 app.get('/randomBackground', function (req, res) {
