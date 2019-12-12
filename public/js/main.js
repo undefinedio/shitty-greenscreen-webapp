@@ -150,8 +150,11 @@ require([
         // TODO set image als foreground
         // window.history.pushState(null, null, '#' + foregroundImage);
         $.get('/randomImageFromCloud', function(data) {
-            console.log(data)
-           // $('#original_image').attr('src', data)
+            console.log(data);
+
+          toDataURL(data, function(dataUrl) {
+            $('#original_image').attr('src', dataUrl)
+          })
         })
         // loadImage('/randomImageFromCloud', function () {
         //     $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
@@ -358,4 +361,18 @@ function exitFullscreen() {
     console.log('exitFullscreen()')
     document.cancelFullScreen()
     document.getElementById('enter-exit-fs').onclick = enterFullscreen
+}
+
+function toDataURL(url, callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.onload = function() {
+    var reader = new FileReader();
+    reader.onloadend = function() {
+      callback(reader.result);
+    }
+    reader.readAsDataURL(xhr.response);
+  };
+  xhr.open('GET', url);
+  xhr.responseType = 'blob';
+  xhr.send();
 }

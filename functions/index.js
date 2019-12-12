@@ -29,7 +29,7 @@ exports.getImage = functions.https.onRequest((req, res) => {
     cors(req, res, () => {
         var bucket = admin.storage().bucket()
 
-        bucket.getFiles().then(files => {
+        return bucket.getFiles().then(files => {
             let urls = []
             const images = files[0]
             images.forEach(function(entry) {
@@ -40,7 +40,8 @@ exports.getImage = functions.https.onRequest((req, res) => {
                 )
             })
             var rand = urls[Math.floor(Math.random() * urls.length)]
-            res.status(200).json(rand)
+
+            res.status(200).json({url: rand})
         })
     })
 })

@@ -60,7 +60,7 @@ app.get('/randomImageFromCloud', function (req, res) {
     fetch(`https://us-central1-shitty-radar.cloudfunctions.net/getImage`)
     .then(response => response.json())
         .then(data => {
-            res.send(data); // Send the file data to the browser.
+            res.send(data.url); // Send the file data to the browser.
         })
 });
 
