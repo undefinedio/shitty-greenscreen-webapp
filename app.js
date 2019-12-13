@@ -64,6 +64,10 @@ app.get('/randomImageFromCloud', function (req, res) {
         })
 });
 
+app.get('/getCountry', function (req, res) {
+    res.send(country); // Send the file data to the browser.
+});
+
 app.get('/randomBackground', function (req, res) {
     fetch(`https://us-central1-shitty-radar.cloudfunctions.net/getLocation`)
     .then(response => response.json())
