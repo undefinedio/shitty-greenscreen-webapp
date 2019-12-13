@@ -15,7 +15,7 @@ require([
     var backgroundImage = 1
     var $loadingPicture
 
-    var foregroundTimer = 2000
+    var foregroundTimer = 1000
     var backgroundTimerMultiplier = 3
     var updown, diff
 
