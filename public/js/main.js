@@ -15,8 +15,8 @@ require([
     var backgroundImage = 1
     var $loadingPicture
 
-    var foregroundTimer = 1000
-    var backgroundTimerMultiplier = 3
+    var foregroundTimer = 10000
+    var backgroundTimerMultiplier = 2
     var updown, diff
 
     var seriously = new Seriously(), // the main object that holds the entire composition
@@ -142,13 +142,6 @@ require([
     }
 
     function nextPic(cb) {
-        if (foregroundImage < maxforegroundImages) {
-            foregroundImage++
-        } else {
-            foregroundImage = 1
-        }
-        // TODO set image als foreground
-        // window.history.pushState(null, null, '#' + foregroundImage);
         $.get('/randomImageFromCloud', function(data) {
             console.log(data)
 
@@ -156,9 +149,6 @@ require([
                 $('#original_image').attr('src', dataUrl)
             })
         })
-        // loadImage('/randomImageFromCloud', function () {
-        //     $('#original_image').attr('src', '/randomImage?count=' + foregroundImage);
-        // });
     }
 
     function prevPic(cb) {
@@ -217,7 +207,7 @@ require([
 
         slideshow = setInterval(function() {
             nextPic()
-        }, 3000)
+        }, foregroundTimer)
     }
 
     function loadImage(src, loaded) {
@@ -324,7 +314,7 @@ function startSlideShow() {
     slideshow = setInterval(function() {
         console.log('test')
         nextPic()
-    }, 3000)
+    }, foregroundTimer)
 }
 
 function stopSlideShow() {
